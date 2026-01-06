@@ -16,7 +16,7 @@ const DashboardHome = () => {
          className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl p-10 text-white shadow-2xl relative overflow-hidden"
       >
         <div className="relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome back, {user?.name || 'Developer'}!</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome back, {user?.user_name || 'Developer'}!</h1>
           <p className="text-indigo-100 text-xl max-w-2xl mb-8">
             Ready to take your skills to the next level? Explore our latest real-world project scenarios and start building today.
           </p>

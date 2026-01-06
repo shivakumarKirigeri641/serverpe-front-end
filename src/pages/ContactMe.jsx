@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import api from "../utils/api";
 // import "../styles/loginpage.css"; 
 import { Helmet } from "react-helmet";
+import axios from "axios";
 
 const ContactMe = () => {
  // const navigate = useNavigate();
@@ -25,14 +26,15 @@ const ContactMe = () => {
 
   // Fetch Categories from API on mount
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchCategories = async () => {      
       try {
-        const response = await api.get('/serverpeuser/feedback-categories');
-        if (response.data && response.data.length > 0) {
-          setCategories(response.data);
+        const response = await api.get('/serverpeuser/mystudents/contact-categories', {withCredentials:true});        
+        if (response?.data?.data && response?.data?.data?.length > 0) {
+          console.log(response.data);
+          setCategories(response.data.data);
           setFormData((prev) => ({
             ...prev,
-            category_name: response.data[0].category_name,
+            category_name: response.data.data[0].category_name,
           }));
         } else {
              // Fallback if API returns empty or differs
@@ -53,12 +55,12 @@ const ContactMe = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await api.post('/serverpeuser/contact-me', formData);
+      await api.post('/serverpeuser/mystudents/contact-categories', formData);
       setSubmitted(true);
       setFormData({
         user_name: "",
         email: "",
-        category_name: categories[0]?.category_name || "",
+        category_name: categories[0]?.category_name,
         message: "",
         rating: 5
       });

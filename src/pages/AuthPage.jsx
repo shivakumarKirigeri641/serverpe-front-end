@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import api from "../utils/api";
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
@@ -22,8 +23,8 @@ const AuthPage = () => {
     college: '',
     state: ''
   });
-  const [loginInput, setLoginInput] = useState('');
-  const [otp, setOtp] = useState('');
+  const [loginInput, setLoginInput] = useState('shivakumar641@gmail.com');
+  const [otp, setOtp] = useState('1234');
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -33,18 +34,21 @@ const AuthPage = () => {
 
   const handleSubscribeRequestOtp = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    /*setLoading(true);
     // Mock API call
-    setTimeout(() => {
-      setLoading(false);
-      setOtpSent(true);
-      toast.success('OTP sent to your email & mobile!');
-    }, 1500);
+    const response = await api.post('/serverpeuser/mystudents/subscribe/send-otp', {
+      email: formData.email,
+      mobile: formData.mobile,
+    }, {withCredentials:true});
+    console.log(response.data);
+    setLoading(false);
+    setOtpSent(true);
+    toast.success('OTP sent to your email & mobile!');*/
   };
 
   const handleSubscribeVerify = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    /*setLoading(true);
     // Mock Verify
     setTimeout(() => {
         setLoading(false);
@@ -52,39 +56,56 @@ const AuthPage = () => {
         setOtpSent(false);
         setOtp('');
         setActiveTab('login');
-    }, 1500);
+    }, 1500);*/
   };
 
   const handleLoginRequestOtp = async (e) => {
     e.preventDefault();
+    setOtpSent(false);
     setLoading(true);
-    // Mock API call
-    const response = await api.post('/serverpeuser/mystudents/login/send-otp', {
-      email: loginInput,
-      password: otp,
-    });
-    console.log(response.data);
-    setLoading(false);
-    toast.success('Login Successful!');
-    navigate('/dashboard');
+    try {
+      const response = await api.post('/serverpeuser/mystudents/login/send-otp', {
+        input_field: loginInput
+      }, {withCredentials:true});
+      console.log('login:', response.data);
+      toast.success('OTP sent successfully!');
+      setOtpSent(true);
+    } catch (error) {
+      console.error("Login OTP Error:", error);
+      toast.error(error.response?.data?.message || 'Failed to send OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLoginVerify = async (e) => {
       e.preventDefault();
       setLoading(true);
+      try{
+        const response = await api.post('/serverpeuser/mystudents/login/verify-otp', {
+          input_field: loginInput,
+          otp: otp
+        }, {withCredentials:true});
+        console.log('login:', response.data);
+        login(response?.data?.data);
+        toast.success('Login Successful!');
+        navigate('/dashboard');
+      }
+       catch (error) {
+      console.error("Verify OTP Error:", error);
+      toast.error(error.response?.data?.message || 'Failed to verify OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
       // Mock Login Verify
-      setTimeout(() => {
+      /*setTimeout(() => {
           setLoading(false);
           // Create dummy user object
           const userData = {
                name: 'Test User',
                email: loginInput.includes('@') ? loginInput : 'test@example.com',
                mobile: !loginInput.includes('@') ? loginInput : '9999999999',
-          };
-          login(userData);
-          toast.success('Welcome back!');
-          navigate('/dashboard');
-      }, 1500);
+          };*/
   };
 
   return (
