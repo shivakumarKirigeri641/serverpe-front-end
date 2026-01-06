@@ -9,9 +9,12 @@ const ExploreProjects = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Re-fetch or get from cache. Let's fetch to be fresh.
-    const result = api.get('/serverpeuser/mystudents/project-list', {withCredentials:true});
-    console.log(result?.data);       
+    const fetchProjects = async () => {
+// Re-fetch or get from cache. Let's fetch to be fresh.
+    const result =await api.get('/serverpeuser/mystudents/project-list', {withCredentials:true});
+    setProjects(result?.data?.data)
+    }    
+    fetchProjects();
   }, []);
 
   return (
@@ -35,7 +38,7 @@ const ExploreProjects = () => {
              <div className="p-6">
                  <p className="text-gray-600 mb-4 line-clamp-3">{project.description}</p>
                  <div className="flex items-center justify-between mt-4">
-                     <span className="text-2xl font-bold text-indigo-600">₹{project.price}</span>
+                     <span className="text-2xl font-bold text-indigo-600">₹{project.base_price}*</span>
                      <button 
                         onClick={() => navigate(`/dashboard/purchase/${project.id}`, { state: { project } })} 
                         className="bg-gray-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-black transition-colors flex items-center gap-2"
