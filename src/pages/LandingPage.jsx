@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Code, BookOpen, Layers, Terminal, ShieldCheck, FileText } from 'lucide-react';
+import { ArrowRight, Layers, Terminal, ShieldCheck } from 'lucide-react';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,7 +41,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-20 pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -62,7 +62,7 @@ const LandingPage = () => {
                 Get Started
               </button>
               <button 
-                onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => navigate('/explore')}
                 className="bg-white text-indigo-600 px-8 py-4 rounded-full font-bold text-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-all border border-indigo-100"
               >
                 Explore Projects

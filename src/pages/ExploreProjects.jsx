@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import { ArrowRight, ShoppingBag } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 
 const ExploreProjects = () => {
   const [projects, setProjects] = useState([]);
@@ -10,7 +10,7 @@ const ExploreProjects = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-// Re-fetch or get from cache. Let's fetch to be fresh.
+    // Re-fetch or get from cache. Let's fetch to be fresh.
     const result =await api.get('/serverpeuser/mystudents/project-list', {withCredentials:true});
     setProjects(result?.data?.data)
     }    

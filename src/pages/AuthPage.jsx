@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Lock, Mail, Phone, User, Building, MapPin, ArrowRight } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
-import api from '../utils/api';
+// import api from '../utils/api';
 
 const AuthPage = () => {
   const [activeTab, setActiveTab] = useState('subscribe');
@@ -59,11 +59,14 @@ const AuthPage = () => {
     e.preventDefault();
     setLoading(true);
     // Mock API call
-    setTimeout(() => {
-      setLoading(false);
-      setOtpSent(true);
-      toast.success(`OTP sent to ${loginInput}`);
-    }, 1500);
+    const response = await api.post('/serverpeuser/mystudents/login/send-otp', {
+      email: loginInput,
+      password: otp,
+    });
+    console.log(response.data);
+    setLoading(false);
+    toast.success('Login Successful!');
+    navigate('/dashboard');
   };
 
   const handleLoginVerify = async (e) => {
@@ -85,7 +88,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4">
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

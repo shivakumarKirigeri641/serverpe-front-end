@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Navbar from './components/Navbar';
+import AboutMe from './pages/AboutMe';
+import ContactMe from './pages/ContactMe';
 import LandingPage from './pages/LandingPage';
 import AuthPage from './pages/AuthPage';
 import DashboardHome from './pages/DashboardHome';
@@ -22,14 +24,15 @@ function App() {
   return (
       <Router>
         <AuthProvider>
-          <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+          <div className="min-h-screen font-sans text-gray-900">
             <Navbar />
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<AuthPage />} />
-              <Route path="/about" element={<LandingPage />} /> {/* Placeholder */}
-              <Route path="/contact" element={<LandingPage />} /> {/* Placeholder */}
+              <Route path="/about" element={<AboutMe />} />
+              <Route path="/contact" element={<ContactMe />} />
+              <Route path="/explore" element={<ExploreProjects />} />
 
               {/* Protected Routes */}
               <Route path="/dashboard" element={<PrivateRoute><DashboardHome /></PrivateRoute>} />

@@ -8,11 +8,11 @@ const PurchaseDetails = () => {
   const { user } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const { projectId } = useParams();
-  const [project, setProject] = useState(location.state?.project || null);
+  // const { projectId } = useParams();
+  const [project] = useState(location.state?.project || null);
   const [disclaimers, setDisclaimers] = useState([]);
   const [agreed, setAgreed] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!project) {
@@ -30,7 +30,7 @@ const PurchaseDetails = () => {
                 { title_id: 2, title: 'Personal Use License', description: 'You cannot resell this code.', is_mandatory: true }
             ]);
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
     };
     fetchDisclaimers();

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+// import { AuthContext } from '../context/AuthContext';
 import { Download } from 'lucide-react';
-import api from '../utils/api';
+// import api from '../utils/api';
 
 const PurchaseHistory = () => {
-    const { user } = useContext(AuthContext);
+    // const { user } = useContext(AuthContext);
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
 
