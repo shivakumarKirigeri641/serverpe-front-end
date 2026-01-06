@@ -16,8 +16,6 @@ const LandingPage = () => {
           api.get('/serverpeuser/mystudents/states'),
           api.get('/serverpeuser/mystudents/project-list')
         ]);
-        console.log(statesRes?.data?.data);
-        console.log(projectsRes?.data?.data);
         localStorage.setItem('serverpe_states', JSON.stringify(statesRes?.data?.data));
         setProjects(projectsRes?.data?.data || []);
       } catch (error) {

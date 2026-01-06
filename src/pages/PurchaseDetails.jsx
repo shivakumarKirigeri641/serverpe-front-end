@@ -21,8 +21,8 @@ const PurchaseDetails = () => {
 
     const fetchDisclaimers = async () => {
         try {
-            const res = await api.get('/serverpeuser/mystudents/disclaimer-before-buy-list');
-            setDisclaimers(res.data || []);
+            const res = await api.get('/serverpeuser/mystudents/disclaimer-before-buy-list', {withCredentials:true});
+            setDisclaimers(res.data.data || []);
         } catch (error) {
             console.error(error);
             setDisclaimers([
@@ -73,7 +73,7 @@ const PurchaseDetails = () => {
         <div className="p-8 bg-gray-50 border-t border-gray-100">
             <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><AlertCircle size={20} className="text-orange-500" /> Important Disclaimers</h3>
             <div className="space-y-4 mb-6">
-                {disclaimers.map((d) => (
+                {disclaimers?.map((d) => (
                     <div key={d.title_id} className="flex gap-3">
                         <div className="mt-1 min-w-[20px] max-w-[20px]">
                            <span className="w-2 h-2 rounded-full bg-gray-400 block"></span>

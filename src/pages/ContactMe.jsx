@@ -29,8 +29,7 @@ const ContactMe = () => {
     const fetchCategories = async () => {      
       try {
         const response = await api.get('/serverpeuser/mystudents/contact-categories', {withCredentials:true});        
-        if (response?.data?.data && response?.data?.data?.length > 0) {
-          console.log(response.data);
+        if (response?.data?.data && response?.data?.data?.length > 0) {          
           setCategories(response.data.data);
           setFormData((prev) => ({
             ...prev,

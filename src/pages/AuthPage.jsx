@@ -23,7 +23,7 @@ const AuthPage = () => {
     college: '',
     state: ''
   });
-  const [loginInput, setLoginInput] = useState('shivakumar641@gmail.com');
+  const [loginInput, setLoginInput] = useState('shivakumar6411@gmail.com');
   const [otp, setOtp] = useState('1234');
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -67,7 +67,6 @@ const AuthPage = () => {
       const response = await api.post('/serverpeuser/mystudents/login/send-otp', {
         input_field: loginInput
       }, {withCredentials:true});
-      console.log('login:', response.data);
       toast.success('OTP sent successfully!');
       setOtpSent(true);
     } catch (error) {
@@ -86,7 +85,6 @@ const AuthPage = () => {
           input_field: loginInput,
           otp: otp
         }, {withCredentials:true});
-        console.log('login:', response.data);
         login(response?.data?.data);
         toast.success('Login Successful!');
         navigate('/dashboard');

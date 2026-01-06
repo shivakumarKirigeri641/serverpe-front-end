@@ -40,7 +40,7 @@ const ExploreProjects = () => {
                  <div className="flex items-center justify-between mt-4">
                      <span className="text-2xl font-bold text-indigo-600">₹{project.base_price}*</span>
                      <button 
-                        onClick={() => navigate(`/dashboard/purchase/${project.id}`, { state: { project } })} 
+                        onClick={() => navigate(`/dashboard/purchase/${project.id}`, { state: { project, proceed_purchase:true } })} 
                         className="bg-gray-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-black transition-colors flex items-center gap-2"
                      >
                         Buy Now <ShoppingBag size={18} />
