@@ -7,6 +7,8 @@ import Footer from './components/common/Footer';
 
 import LandingPage from './pages/public/LandingPage';
 import SubscribeLoginPage from './pages/public/SubscribeLoginPage';
+import About from './pages/public/About';
+import Contact from './pages/public/Contact';
 
 import DashboardHome from './pages/dashboard/DashboardHome';
 import ExploreProjects from './pages/dashboard/ExploreProjects';
@@ -27,6 +29,8 @@ function App() {
               {/* Public Routes */}
               <Route path="/" element={<LandingPage />} />
               <Route path="/auth" element={<SubscribeLoginPage />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               
               {/* Protected Routes (Placeholder structure) */}
               <Route path="/dashboard" element={<DashboardHome />} />

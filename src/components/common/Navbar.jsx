@@ -13,9 +13,9 @@ const Navbar = () => {
   // Common links
   const publicLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Explore Projects', path: '/#projects' }, // Anchor for landing
-    { name: 'About me', path: '/#about' },
-    { name: 'Contact me', path: '/#contact' },
+    { name: 'Explore Projects', path: '/' }, // Redirect to home for projects section
+    { name: 'About me', path: '/about' },
+    { name: 'Contact me', path: '/contact' },
   ];
 
   const dashboardLinks = [
