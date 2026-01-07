@@ -37,26 +37,31 @@ const SummaryPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [pageError, setPageError] = useState(null);
   
-  const selectedPlan = location.state?.plan;
-
+  const selectedPlan = location.state?.purchaseData;
+  console.log(selectedPlan);
   // Form State and Error State
   const [formData, setFormData] = useState({
     user_name: "",
-    myemail: "",
+    email: "",
     mobile_number: "",
+    state_name:"",
   });
   const [formErrors, setFormErrors] = useState({});
 
-  const fetchProfileData = useCallback(async () => {
+  
+
+  useEffect(() => {    
+    const fetchProfileData = async () => {
     setIsLoading(true);
-    try {      
-      console.log('calling userprofile');
-      const res = await apiService.fetchProfileData();      
-      console.log('calling userprofiless');
+    try {
+      const res = await apiService.fetchUserProfile();
       const data = res?.data?.data || {};
-      console.log(res?.data);
+      console.log(data);
       setFormData({
+        user_name: data.user_name || "",
         mobile_number: data.mobile_number || "",
+        email: data.email || "",
+        state_name: data.state_name || "",
       });
     } catch (error) {
       if (error.response?.status === 401) {        
@@ -67,9 +72,7 @@ const SummaryPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [process.env.BACKEND_URL, navigate]);
-
-  useEffect(() => {    
+  }
     fetchProfileData();
   }, []);
 
@@ -330,13 +333,26 @@ const SummaryPage = () => {
               <div className="flex justify-between items-center mb-1">
                 <span className="text-gray-400 text-sm">Selected Plan</span>
                 <span className="font-bold text-indigo-400">
-                  {selectedPlan?.price_name}
+                  {selectedPlan?.project_details?.project_code}
                 </span>
               </div>
               <div className="flex justify-between items-baseline">
+                <span className="text-lg font-bold">Base price</span>
+                <span className="text-xl font-extrabold text-green-400">
+                  ₹{selectedPlan?.project_details?.base_price}
+                </span>
+              </div>
+              <div className="flex justify-between items-baseline">
+                <span className="text-lg font-bold">GST</span>
+                <span className="text-xl font-extrabold text-green-400">
+                  ₹{selectedPlan?.project_details?.gst_percent}%
+                </span>                
+              </div>
+              <div>--------------------</div>
+              <div className="flex justify-between items-baseline">
                 <span className="text-lg font-bold">Payable Amount</span>
                 <span className="text-3xl font-extrabold text-green-400">
-                  ₹{selectedPlan?.price}
+                  ₹{selectedPlan?.total_payment}
                 </span>
               </div>
             </div>
@@ -376,11 +392,11 @@ const SummaryPage = () => {
                   </label>
                   <input
                     type="email"
-                    name="myemail"
-                    value={formData.myemail}
+                    name="email"
+                    value={formData.email}
                     onChange={handleInputChange}
                     className={`w-full bg-gray-900 border ${
-                      formErrors.myemail ? "border-red-500" : "border-gray-700"
+                      formErrors.email ? "border-red-500" : "border-gray-700"
                     } rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none`}
                     placeholder="email@example.com"
                   />
@@ -389,9 +405,9 @@ const SummaryPage = () => {
                     Note: This email will be used for payment notifications and
                     sending your official tax invoice.
                   </p>
-                  {formErrors.myemail && (
+                  {formErrors.email && (
                     <p className="text-red-500 text-[10px] mt-1">
-                      {formErrors.myemail}
+                      {formErrors.email}
                     </p>
                   )}
                 </div>
@@ -415,6 +431,28 @@ const SummaryPage = () => {
                   {formErrors.mobile_number && (
                     <p className="text-red-500 text-[10px] mt-1">
                       {formErrors.mobile_number}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">
+                    State/Union Territory
+                  </label>
+                  <input
+                    type="text"
+                    name="state_name"
+                    value={formData.state_name}
+                    onChange={handleInputChange}
+                    className={`w-full bg-gray-900 border ${
+                      formErrors.state_name
+                        ? "border-red-500"
+                        : "border-gray-700"
+                    } rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 outline-none`}
+                    placeholder="State/Union Territory"
+                  />
+                  {formErrors.state_name && (
+                    <p className="text-red-500 text-[10px] mt-1">
+                      {formErrors.state_name}
                     </p>
                   )}
                 </div>

@@ -21,8 +21,8 @@ const SubscribeLoginPage = () => {
   const [states, setStates] = useState([]);
 
   // Login State
-  const [loginInput, setLoginInput] = useState('');
-  const [loginOtp, setLoginOtp] = useState('');
+  const [loginInput, setLoginInput] = useState('amruta.jv@gmail.com');
+  const [loginOtp, setLoginOtp] = useState('1234');
   const [loginStep, setLoginStep] = useState(1); // 1: Input, 2: OTP
 
   // Subscribe State
