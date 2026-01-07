@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import ServerPeLogo from "../../images/ServerPe_Logo.jpg";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
 import axios from "axios";
+import apiService from "../../api/apiService";
 
 // import "../styles/loginpage.css"; // CSS file not found
 // --- NavItem Component Definition ---
@@ -50,10 +51,7 @@ const SuccessPayment = () => {
     try {
       //update thet
       // 1. Fetch User Profile for State Info
-      const profileResponse = await axios.get(
-        `${process.env.BACKEND_URL}/serverpeuser/loggedinuser/user-profile`,
-        { withCredentials: true }
-      );
+      const profileResponse = await apiService.fetchUserProfile();
 
       if (profileResponse?.data?.successstatus) {
         const profileData = profileResponse.data.data;
@@ -64,7 +62,7 @@ const SuccessPayment = () => {
       // 2. Fetch Payment Details
       if (paymentId) {
         const response = await axios.post(
-          `${process.env.BACKEND_URL}/serverpeuser/loggedinuser/razorpay/status`,
+          `${process.env.REACT_APP_BACKEND_URL}/serverpeuser/loggedinuser/razorpay/status`,
           {
             razorpay_payment_id: paymentId,
             summaryFormData: summaryFormData,

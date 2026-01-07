@@ -82,10 +82,10 @@ const SummaryPage = () => {
     const phoneRegex = /^[6-9]\d{9}$/;
 
     if (!formData.user_name.trim()) errors.user_name = "Name is required";
-    if (!formData.myemail.trim()) {
-      errors.myemail = "Email is required";
-    } else if (!emailRegex.test(formData.myemail)) {
-      errors.myemail = "Invalid email format";
+    if (!formData.email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = "Invalid email format";
     }
     if (!formData.mobile_number.trim()) {
       errors.mobile_number = "Mobile number is required";
@@ -115,6 +115,7 @@ const SummaryPage = () => {
 
     try {
       // Step 1: Load Razorpay SDK
+      console.log("Loading Razorpay SDK...");
       const res = await loadRazorpay();
       if (!res) {
         const razorpayError = {
@@ -131,9 +132,10 @@ const SummaryPage = () => {
       }
 
       // Step 2: Create Payment Order
+      console.log(`path: ${process.env.REACT_APP_BACKEND_URL}/serverpeuser/loggedinuser/razorpay/order`)
       const orderRes = await axios.post(
-        `${process.env.BACKEND_URL}/mockapis/serverpeuser/loggedinuser/razorpay/order`,
-        { amount: selectedPlan.price },
+        `${process.env.REACT_APP_BACKEND_URL}/serverpeuser/loggedinuser/razorpay/order`,
+        { amount: selectedPlan?.total_payment },
         { withCredentials: true, timeout: 10000 }
       );
 
@@ -162,16 +164,17 @@ const SummaryPage = () => {
 
             // Verify payment with backend
             const verifyRes = await axios.post(
-              `${process.env.BACKEND_URL}/serverpeuser/loggedinuser/razorpay/verify`,
+              `${process.env.REACT_APP_BACKEND_URL}/serverpeuser/loggedinuser/razorpay/verify`,
               { ...response, ...formData },
               { withCredentials: true, timeout: 10000 }
             );
 
             if (verifyRes?.data?.statuscode) {
               // Payment successful
+              console.log("Payment successful");
               navigate(
-                `/payment-success?payment_id=${response.razorpay_payment_id}`,
-                { state: formData }
+                `/payment/success?payment_id=${response.razorpay_payment_id}`,
+                { state: {formData, selectedPlan} }
               );
             } else {
               const errorMsg =
