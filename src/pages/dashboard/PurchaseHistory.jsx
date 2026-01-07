@@ -50,13 +50,26 @@ const PurchaseHistory = () => {
                      <p>License: <code className="bg-gray-100 px-1 rounded">{item.license_key}</code></p>
                   </div>
                </div>
-               <div className="text-right">
-                  <p className="text-2xl font-bold text-gray-900 mb-2">₹{item.payable_amount}</p>
-                  <Button variant="secondary" className="flex items-center gap-2 text-sm">
-                     <ArrowDownTrayIcon className="h-4 w-4" /> Download
-                  </Button>
-               </div>
-            </div>
+                <div className="text-right flex flex-col items-end gap-3">
+                   <p className="text-2xl font-bold text-gray-900 mb-2">₹{item.payable_amount}</p>
+                   <div className="flex gap-3">
+                     <Button 
+                        variant="secondary" 
+                        className="flex items-center gap-2 text-sm"
+                        onClick={() => alert("Downloading Invoice for Order: " + item.order_number)}
+                     >
+                        <ArrowDownTrayIcon className="h-4 w-4" /> Download <span className="hidden sm:inline">Invoice</span>
+                     </Button>
+                     <Button 
+                        variant="primary" 
+                        className="flex items-center gap-2 text-sm"
+                        onClick={() => alert("Downloading Project: " + item.project_title)}
+                     >
+                        <ArrowDownTrayIcon className="h-4 w-4" /> Download <span className="hidden sm:inline">Project</span>
+                     </Button>
+                   </div>
+                </div>
+             </div>
           ))}
         </div>
       )}
