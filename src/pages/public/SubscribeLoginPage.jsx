@@ -6,6 +6,9 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { Tab } from '@headlessui/react';
 import Logo from '../../images/ServerPe_Logo.svg';
+import Modal from '../../components/common/Modal';
+import { REFUND_POLICY, TERMS_CONDITIONS, PRIVACY_POLICY } from '../../constants/policies';
+import { isValidEmail, isValidMobile, isValidName, isValidOTP } from '../../utils/validation';
 
 const SubscribeLoginPage = () => {
   const navigate = useNavigate();
@@ -32,6 +35,18 @@ const SubscribeLoginPage = () => {
   });
   const [subStep, setSubStep] = useState(1); // 1: Form, 2: OTP
   const [subOtp, setSubOtp] = useState({ mobile_otp: '', email_otp: '' });
+  const [agreed, setAgreed] = useState(false);
+  
+  // Validation Errors State
+  const [fieldErrors, setFieldErrors] = useState({});
+  
+  // Policy Modal State
+  const [policyModal, setPolicyModal] = useState({ isOpen: false, title: '', content: '' });
+
+  const openPolicy = (title, content) => {
+    setPolicyModal({ isOpen: true, title, content });
+  };
+  const closePolicy = () => setPolicyModal({ ...policyModal, isOpen: false });
 
   // Mock Colleges
   const colleges = [
@@ -53,13 +68,27 @@ const SubscribeLoginPage = () => {
       }
     };
     getStates();
-  }, []);
+    setError('');
+    setFieldErrors({});
+  }, [selectedIndex]); // Clear errors on tab switch
 
   // Login Handlers
   const handleLoginSendOtp = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setFieldErrors({});
+
+    // Validate Input (Mobile or Email)
+    const isMobile = isValidMobile(loginInput);
+    const isEmail = isValidEmail(loginInput);
+
+    if (!isMobile && !isEmail) {
+        setFieldErrors({ loginInput: 'Please enter a valid 10-digit mobile number or email address.' });
+        setLoading(false);
+        return;
+    }
+
     try {
       const res = await apiService.loginSendOtp(loginInput);
       if (res.data.successstatus) {
@@ -78,6 +107,14 @@ const SubscribeLoginPage = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setFieldErrors({});
+
+    if (!isValidOTP(loginOtp)) {
+        setFieldErrors({ loginOtp: 'Please enter a valid OTP (4-6 digits).' });
+        setLoading(false);
+        return;
+    }
+
     try {
       const res = await apiService.loginVerifyOtp(loginInput, loginOtp);
       if (res.data.successstatus) {
@@ -96,12 +133,33 @@ const SubscribeLoginPage = () => {
   // Subscribe Handlers
   const handleSubChange = (e) => {
     setSubForm({ ...subForm, [e.target.id]: e.target.value });
+    // Clear error for this field
+    if (fieldErrors[e.target.id]) {
+        setFieldErrors({ ...fieldErrors, [e.target.id]: '' });
+    }
+  };
+
+  const validateSubscribeForm = () => {
+    const errors = {};
+    if (!isValidName(subForm.user_name)) errors.user_name = 'Name must be 2-50 characters (letters only).';
+    if (!isValidMobile(subForm.mobile_number)) errors.mobile_number = 'Enter a valid 10-digit mobile number.';
+    if (!isValidEmail(subForm.email)) errors.email = 'Enter a valid email address.';
+    if (!subForm.collegeid) errors.collegeid = 'Please select a college.';
+    if (!subForm.stateid) errors.stateid = 'Please select a state.';
+    return errors;
   };
 
   const handleSubSendOtp = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+    
+    const errors = validateSubscribeForm();
+    if (Object.keys(errors).length > 0) {
+        setFieldErrors(errors);
+        return;
+    }
+    
+    setLoading(true);
     try {
       const res = await apiService.subscriptionSendOtp({
         ...subForm,
@@ -125,6 +183,18 @@ const SubscribeLoginPage = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setFieldErrors({});
+
+    const errors = {};
+    if (!isValidOTP(subOtp.mobile_otp)) errors.mobile_otp = 'Invalid Mobile OTP.';
+    if (!isValidOTP(subOtp.email_otp)) errors.email_otp = 'Invalid Email OTP.';
+    
+    if (Object.keys(errors).length > 0) {
+        setFieldErrors(errors);
+        setLoading(false);
+        return;
+    }
+
     try {
       const payload = {
         mobile_number: subForm.mobile_number,
@@ -134,11 +204,11 @@ const SubscribeLoginPage = () => {
       };
       const res = await apiService.subscriptionVerifyOtp(payload);
       if (res.data.successstatus) {
-        // After toggle success, we generally require login, but let's see if it returns user
         alert("Subscription successful! Please login.");
         setSelectedIndex(1); // Switch to login tab
         setSubStep(1);
         setSubForm({...subForm, mobile_number: '', email: ''});
+        setSubOtp({ mobile_otp: '', email_otp: '' });
       } else {
         setError(res.data.message || 'OTP Verification failed');
       }
@@ -154,8 +224,6 @@ const SubscribeLoginPage = () => {
   }
 
   return (
-
-
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img src={Logo} alt="ServerPe" className="mx-auto h-16 w-auto" />
@@ -194,29 +262,86 @@ const SubscribeLoginPage = () => {
               {/* SUBSCRIBE PANEL */}
               <Tab.Panel>
                 {subStep === 1 ? (
-                  <form className="space-y-6" onSubmit={handleSubSendOtp}>
-                    <Input id="user_name" label="Full Name" value={subForm.user_name} onChange={handleSubChange} required />
-                    <Input id="mobile_number" label="Mobile Number" value={subForm.mobile_number} onChange={handleSubChange} required />
-                    <Input id="email" label="Email Address" type="email" value={subForm.email} onChange={handleSubChange} required />
+                  <form className="space-y-6" onSubmit={handleSubSendOtp} noValidate>
+                    <Input 
+                        id="user_name" 
+                        label="Full Name" 
+                        value={subForm.user_name} 
+                        onChange={handleSubChange} 
+                        required 
+                        error={fieldErrors.user_name}
+                    />
+                    <Input 
+                        id="mobile_number" 
+                        label="Mobile Number" 
+                        value={subForm.mobile_number} 
+                        onChange={handleSubChange} 
+                        required 
+                        maxLength={10}
+                        error={fieldErrors.mobile_number}
+                    />
+                    <Input 
+                        id="email" 
+                        label="Email Address" 
+                        type="email" 
+                        value={subForm.email} 
+                        onChange={handleSubChange} 
+                        required 
+                        error={fieldErrors.email}
+                    />
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">College</label>
-                      <select id="collegeid" value={subForm.collegeid} onChange={handleSubChange} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                      <select 
+                        id="collegeid" 
+                        value={subForm.collegeid} 
+                        onChange={handleSubChange} 
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${fieldErrors.collegeid ? 'border-red-500' : 'border-gray-300'}`}
+                      >
                         {colleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                       </select>
+                      {fieldErrors.collegeid && <p className="mt-1 text-sm text-red-600">{fieldErrors.collegeid}</p>}
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">State / Union Territory</label>
-                      <select id="stateid" value={subForm.stateid} onChange={handleSubChange} className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                      <select 
+                        id="stateid" 
+                        value={subForm.stateid} 
+                        onChange={handleSubChange} 
+                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${fieldErrors.stateid ? 'border-red-500' : 'border-gray-300'}`}
+                        required
+                      >
                         <option value="">Select State</option>
                         {states.map(s => <option key={s.id} value={s.id}>{s.state_name}</option>)}
                       </select>
+                      {fieldErrors.stateid && <p className="mt-1 text-sm text-red-600">{fieldErrors.stateid}</p>}
                     </div>
 
                     {error && <div className="text-red-500 text-sm">{error}</div>}
 
-                    <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+                    <div className="flex items-start">
+                      <div className="flex items-center h-5">
+                        <input
+                          id="terms"
+                          name="terms"
+                          type="checkbox"
+                          checked={agreed}
+                          onChange={(e) => setAgreed(e.target.checked)}
+                          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
+                      </div>
+                      <div className="ml-3 text-sm">
+                        <label htmlFor="terms" className="font-medium text-gray-700">
+                          I agree to the{' '}
+                          <button type="button" onClick={() => openPolicy('Terms & Conditions', TERMS_CONDITIONS)} className="text-indigo-600 hover:text-indigo-500 underline">Terms</button>,{' '}
+                          <button type="button" onClick={() => openPolicy('Privacy Policy', PRIVACY_POLICY)} className="text-indigo-600 hover:text-indigo-500 underline">Privacy</button>, and{' '}
+                          <button type="button" onClick={() => openPolicy('Refund Policy', REFUND_POLICY)} className="text-indigo-600 hover:text-indigo-500 underline">Refund Policy</button>.
+                        </label>
+                      </div>
+                    </div>
+
+                    <Button type="submit" variant="primary" className="w-full" disabled={loading || !agreed}>
                       {loading ? 'Processing...' : 'Get OTP'}
                     </Button>
                   </form>
@@ -230,12 +355,16 @@ const SubscribeLoginPage = () => {
                       value={subOtp.mobile_otp} 
                       onChange={(e) => setSubOtp({...subOtp, mobile_otp: e.target.value})} 
                       required 
+                      maxLength={6}
+                      error={fieldErrors.mobile_otp}
                     />
                     <Input 
                       label="Email OTP" 
                       value={subOtp.email_otp} 
                       onChange={(e) => setSubOtp({...subOtp, email_otp: e.target.value})} 
                       required 
+                      maxLength={6}
+                      error={fieldErrors.email_otp}
                     />
                      {error && <div className="text-red-500 text-sm">{error}</div>}
                     <Button type="submit" variant="primary" className="w-full" disabled={loading}>
@@ -249,13 +378,14 @@ const SubscribeLoginPage = () => {
               {/* LOGIN PANEL */}
               <Tab.Panel>
                 {loginStep === 1 ? (
-                  <form className="space-y-6" onSubmit={handleLoginSendOtp}>
+                  <form className="space-y-6" onSubmit={handleLoginSendOtp} noValidate>
                      <Input 
                         id="loginInput" 
                         label="Email or Mobile Number" 
                         value={loginInput} 
                         onChange={(e) => setLoginInput(e.target.value)} 
                         required 
+                        error={fieldErrors.loginInput}
                       />
                       {error && <div className="text-red-500 text-sm">{error}</div>}
                       <Button type="submit" variant="primary" className="w-full" disabled={loading}>
@@ -273,6 +403,8 @@ const SubscribeLoginPage = () => {
                         value={loginOtp} 
                         onChange={(e) => setLoginOtp(e.target.value)} 
                         required 
+                        maxLength={6}
+                        error={fieldErrors.loginOtp}
                     />
                     {error && <div className="text-red-500 text-sm">{error}</div>}
                     <Button type="submit" variant="primary" className="w-full" disabled={loading}>
@@ -288,6 +420,9 @@ const SubscribeLoginPage = () => {
 
         </div>
       </div>
+      <Modal isOpen={policyModal.isOpen} closeModal={closePolicy} title={policyModal.title}>
+        {policyModal.content}
+      </Modal>
     </div>
   );
 };

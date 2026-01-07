@@ -1,22 +1,20 @@
 import React from 'react';
 
-const Input = ({ label, id, type = "text", error, className = "", ...props }) => {
+const Input = ({ label, error, className, ...props }) => {
   return (
-    <div className={`flex flex-col ${className}`}>
+    <div className={className}>
       {label && (
-        <label htmlFor={id} className="mb-1 text-sm font-medium text-gray-700">
+        <label htmlFor={props.id} className="block text-sm font-medium text-gray-700 mb-1">
           {label}
         </label>
       )}
       <input
-        id={id}
-        type={type}
-        className={`px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors
-          ${error ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-white'}
-        `}
         {...props}
+        className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+          error ? 'border-red-500' : 'border-gray-300'
+        }`}
       />
-      {error && <span className="mt-1 text-xs text-red-500">{error}</span>}
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );
 };
