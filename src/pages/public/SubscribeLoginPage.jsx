@@ -224,32 +224,32 @@ const SubscribeLoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-[url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-slate-50/90">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <img src={Logo} alt="ServerPe" className="mx-auto h-16 w-auto" />
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <img src={Logo} alt="ServerPe" className="mx-auto h-20 w-auto mb-6 drop-shadow-sm" />
+        <h2 className="text-center text-3xl font-extrabold text-slate-900 tracking-tight">
           Welcome to ServerPe
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Your gateway to professional project demos
+        <p className="mt-2 text-center text-sm text-slate-600 max-w-xs mx-auto">
+          Your gateway to professional enterprise project demos and learning resources
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white/95 backdrop-blur py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-white/50">
           
           <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
-            <Tab.List className="flex space-x-1 rounded-xl bg-indigo-900/10 p-1 mb-6">
+            <Tab.List className="flex space-x-1 rounded-xl bg-slate-100 p-1.5 mb-8">
               {['Subscribe', 'Login'].map((category) => (
                 <Tab
                   key={category}
                   className={({ selected }) =>
                     listClass(
-                      'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                      'w-full rounded-lg py-2.5 text-sm font-semibold leading-5 text-indigo-700 transition-all duration-200',
                       'ring-white ring-opacity-60 ring-offset-2 ring-offset-indigo-400 focus:outline-none focus:ring-2',
                       selected
-                        ? 'bg-white shadow text-indigo-700'
-                        : 'text-indigo-600 hover:bg-white/[0.12] hover:text-indigo-800'
+                        ? 'bg-white shadow-sm text-indigo-700'
+                        : 'text-slate-500 hover:bg-white/[0.12] hover:text-indigo-600'
                     )
                   }
                 >
@@ -262,7 +262,7 @@ const SubscribeLoginPage = () => {
               {/* SUBSCRIBE PANEL */}
               <Tab.Panel>
                 {subStep === 1 ? (
-                  <form className="space-y-6" onSubmit={handleSubSendOtp} noValidate>
+                  <form className="space-y-5" onSubmit={handleSubSendOtp} noValidate>
                     <Input 
                         id="user_name" 
                         label="Full Name" 
@@ -291,12 +291,12 @@ const SubscribeLoginPage = () => {
                     />
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">College</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-0.5">College</label>
                       <select 
                         id="collegeid" 
                         value={subForm.collegeid} 
                         onChange={handleSubChange} 
-                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${fieldErrors.collegeid ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`block w-full px-4 py-2.5 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 sm:text-sm bg-white ${fieldErrors.collegeid ? 'border-red-300 focus:border-red-500' : 'border-gray-300'}`}
                       >
                         {colleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                       </select>
@@ -304,12 +304,12 @@ const SubscribeLoginPage = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">State / Union Territory</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5 ml-0.5">State / Union Territory</label>
                       <select 
                         id="stateid" 
                         value={subForm.stateid} 
                         onChange={handleSubChange} 
-                        className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${fieldErrors.stateid ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`block w-full px-4 py-2.5 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 sm:text-sm bg-white ${fieldErrors.stateid ? 'border-red-300 focus:border-red-500' : 'border-gray-300'}`}
                         required
                       >
                         <option value="">Select State</option>
@@ -318,9 +318,9 @@ const SubscribeLoginPage = () => {
                       {fieldErrors.stateid && <p className="mt-1 text-sm text-red-600">{fieldErrors.stateid}</p>}
                     </div>
 
-                    {error && <div className="text-red-500 text-sm">{error}</div>}
+                    {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-sm font-medium">{error}</div>}
 
-                    <div className="flex items-start">
+                    <div className="flex items-start bg-slate-50 p-3 rounded-lg border border-slate-100">
                       <div className="flex items-center h-5">
                         <input
                           id="terms"
@@ -331,24 +331,25 @@ const SubscribeLoginPage = () => {
                           className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                         />
                       </div>
-                      <div className="ml-3 text-sm">
-                        <label htmlFor="terms" className="font-medium text-gray-700">
+                      <div className="ml-3 text-xs leading-5">
+                        <label htmlFor="terms" className="text-slate-600">
                           I agree to the{' '}
-                          <button type="button" onClick={() => openPolicy('Terms & Conditions', TERMS_CONDITIONS)} className="text-indigo-600 hover:text-indigo-500 underline">Terms</button>,{' '}
-                          <button type="button" onClick={() => openPolicy('Privacy Policy', PRIVACY_POLICY)} className="text-indigo-600 hover:text-indigo-500 underline">Privacy</button>, and{' '}
-                          <button type="button" onClick={() => openPolicy('Refund Policy', REFUND_POLICY)} className="text-indigo-600 hover:text-indigo-500 underline">Refund Policy</button>.
+                          <button type="button" onClick={() => openPolicy('Terms & Conditions', TERMS_CONDITIONS)} className="text-indigo-600 hover:text-indigo-500 font-semibold hover:underline">Terms</button>,{' '}
+                          <button type="button" onClick={() => openPolicy('Privacy Policy', PRIVACY_POLICY)} className="text-indigo-600 hover:text-indigo-500 font-semibold hover:underline">Privacy</button>, and{' '}
+                          <button type="button" onClick={() => openPolicy('Refund Policy', REFUND_POLICY)} className="text-indigo-600 hover:text-indigo-500 font-semibold hover:underline">Refund Policy</button>.
                         </label>
                       </div>
                     </div>
 
-                    <Button type="submit" variant="primary" className="w-full" disabled={loading || !agreed}>
+                    <Button type="submit" variant="gradient" className="w-full py-3 text-base shadow-indigo-500/25" disabled={loading || !agreed}>
                       {loading ? 'Processing...' : 'Get OTP'}
                     </Button>
                   </form>
                 ) : (
                   <form className="space-y-6" onSubmit={handleSubVerifyOtp}>
-                    <div className="text-center text-sm text-gray-500 mb-4">
-                      Enter the OTPs sent to your mobile and email.
+                    <div className="text-center text-sm text-slate-500 mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                      <span className="font-semibold block text-blue-800 mb-1">Check your inbox & phone</span>
+                      Enter the OTPs sent to your mobile and email to complete verification.
                     </div>
                     <Input 
                       label="Mobile OTP" 
@@ -356,6 +357,7 @@ const SubscribeLoginPage = () => {
                       onChange={(e) => setSubOtp({...subOtp, mobile_otp: e.target.value})} 
                       required 
                       maxLength={6}
+                      placeholder="e.g. 123456"
                       error={fieldErrors.mobile_otp}
                     />
                     <Input 
@@ -364,13 +366,14 @@ const SubscribeLoginPage = () => {
                       onChange={(e) => setSubOtp({...subOtp, email_otp: e.target.value})} 
                       required 
                       maxLength={6}
+                      placeholder="e.g. 123456"
                       error={fieldErrors.email_otp}
                     />
-                     {error && <div className="text-red-500 text-sm">{error}</div>}
-                    <Button type="submit" variant="primary" className="w-full" disabled={loading}>
-                      {loading ? 'Verifying...' : 'Subscribe'}
+                     {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-sm font-medium">{error}</div>}
+                    <Button type="submit" variant="gradient" className="w-full py-3 text-base shadow-indigo-500/25" disabled={loading}>
+                      {loading ? 'Verifying...' : 'Verify & Subscribe'}
                     </Button>
-                     <button type="button" onClick={() => setSubStep(1)} className="w-full text-center text-sm text-indigo-600 mt-2">Back</button>
+                     <button type="button" onClick={() => setSubStep(1)} className="w-full text-center text-sm text-slate-500 hover:text-indigo-600 mt-4 font-medium transition-colors">← Back to Details</button>
                   </form>
                 )}
               </Tab.Panel>
@@ -378,39 +381,41 @@ const SubscribeLoginPage = () => {
               {/* LOGIN PANEL */}
               <Tab.Panel>
                 {loginStep === 1 ? (
-                  <form className="space-y-6" onSubmit={handleLoginSendOtp} noValidate>
+                  <form className="space-y-6 mt-4" onSubmit={handleLoginSendOtp} noValidate>
                      <Input 
                         id="loginInput" 
                         label="Email or Mobile Number" 
                         value={loginInput} 
                         onChange={(e) => setLoginInput(e.target.value)} 
                         required 
+                        placeholder="Enter your registered contact"
                         error={fieldErrors.loginInput}
                       />
-                      {error && <div className="text-red-500 text-sm">{error}</div>}
-                      <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+                      {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-sm font-medium">{error}</div>}
+                      <Button type="submit" variant="primary" className="w-full py-3" disabled={loading}>
                         {loading ? 'Sending OTP...' : 'Get OTP'}
                       </Button>
                   </form>
                 ) : (
                   <form className="space-y-6" onSubmit={handleLoginVerifyOtp}>
-                     <div className="text-center text-sm text-gray-500 mb-4">
-                      Enter the OTP sent to {loginInput}
+                     <div className="text-center text-sm text-slate-500 mb-6 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                      OTP sent to <span className="font-semibold text-slate-800">{loginInput}</span>
                     </div>
                     <Input 
-                        label="OTP" 
+                        label="Enter OTP" 
                         type="password"
                         value={loginOtp} 
                         onChange={(e) => setLoginOtp(e.target.value)} 
                         required 
                         maxLength={6}
+                        placeholder="••••••"
                         error={fieldErrors.loginOtp}
                     />
-                    {error && <div className="text-red-500 text-sm">{error}</div>}
-                    <Button type="submit" variant="primary" className="w-full" disabled={loading}>
+                    {error && <div className="p-3 rounded-lg bg-red-50 border border-red-100 text-red-600 text-sm font-medium">{error}</div>}
+                    <Button type="submit" variant="primary" className="w-full py-3" disabled={loading}>
                        {loading ? 'Verifying...' : 'Verify & Login'}
                     </Button>
-                    <button type="button" onClick={() => setLoginStep(1)} className="w-full text-center text-sm text-indigo-600 mt-2">Back</button>
+                    <button type="button" onClick={() => setLoginStep(1)} className="w-full text-center text-sm text-slate-500 hover:text-indigo-600 mt-4 font-medium transition-colors">← Change Mobile/Email</button>
                   </form>
                 )}
               </Tab.Panel>

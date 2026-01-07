@@ -28,50 +28,52 @@ const Navbar = () => {
   const links = user ? dashboardLinks : publicLinks;
 
   return (
-    <nav className="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100 shadow-sm">
+    <nav className="bg-white/80 backdrop-blur-xl sticky top-0 z-50 border-b border-gray-200/50 shadow-sm transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-3">
-              <img src={Logo} alt="ServerPe Logo" className="h-10 w-auto" />
+            <Link to={user ? "/dashboard" : "/"} className="flex items-center gap-3 group">
+              <img src={Logo} alt="ServerPe Logo" className="h-10 w-auto transition-transform duration-300 group-hover:scale-110" />
               <div className="hidden sm:block">
-                 <span className="block text-xl font-black text-gray-900 leading-none">
+                 <span className="block text-xl font-bold text-gray-900 leading-none tracking-tight">
                   ServerPe
                 </span>
-                <span className="block text-[0.65rem] font-bold text-indigo-600 uppercase tracking-widest leading-none">App Solutions</span>
+                <span className="block text-[0.65rem] font-bold text-indigo-600 uppercase tracking-widest leading-none mt-0.5">App Solutions</span>
               </div>
             </Link>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8 items-center">
+          <div className="hidden md:flex space-x-1 items-center">
             {links.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-gray-600 hover:text-indigo-600 font-medium text-sm transition-colors"
+                className="text-gray-600 hover:text-indigo-600 hover:bg-indigo-50/50 px-4 py-2 rounded-full font-medium text-sm transition-all duration-200"
               >
                 {link.name}
               </Link>
             ))}
             
-            {user ? (
-              <Button variant="text" onClick={logout} className="text-red-500 hover:text-red-600">
-                Logout
-              </Button>
-            ) : (
-              <Link to="/auth">
-                <Button variant="primary">Subscribe / Login</Button>
-              </Link>
-            )}
+            <div className="pl-4 ml-4 border-l border-gray-200 h-8 flex items-center">
+              {user ? (
+                <Button variant="text" onClick={logout} className="text-red-500 hover:text-red-700 text-sm font-semibold">
+                  Logout
+                </Button>
+              ) : (
+                <Link to="/auth">
+                  <Button variant="gradient" className="rounded-full px-6 shadow-indigo-500/20">Subscribe / Login</Button>
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+              className="p-2 rounded-lg text-gray-500 hover:text-indigo-600 hover:bg-gray-100 transition-colors focus:outline-none"
             >
               {isOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
             </button>
@@ -81,32 +83,32 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white border-b border-gray-100">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-gray-200 absolute w-full shadow-lg animate-fade-in-down">
+          <div className="px-4 pt-2 pb-6 space-y-2">
             {links.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
                 onClick={() => setIsOpen(false)}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50"
+                className="block px-4 py-3 rounded-lg text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
               >
                 {link.name}
               </Link>
             ))}
-            {user ? (
-               <button
-                onClick={() => { logout(); setIsOpen(false); }}
-                className="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50"
-               >
-                 Logout
-               </button>
-            ) : (
-              <Link to="/auth" onClick={() => setIsOpen(false)}>
-                <div className="mt-4 px-3">
-                   <Button variant="primary" className="w-full">Subscribe / Login</Button>
-                </div>
-              </Link>
-            )}
+            <div className="pt-4 mt-2 border-t border-gray-100">
+                {user ? (
+                <button
+                    onClick={() => { logout(); setIsOpen(false); }}
+                    className="w-full text-left block px-4 py-3 rounded-lg text-base font-medium text-red-600 hover:bg-red-50"
+                >
+                    Logout
+                </button>
+                ) : (
+                <Link to="/auth" onClick={() => setIsOpen(false)}>
+                    <Button variant="gradient" className="w-full justify-center rounded-xl py-3">Subscribe / Login</Button>
+                </Link>
+                )}
+            </div>
           </div>
         </div>
       )}
