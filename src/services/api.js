@@ -27,8 +27,22 @@ api.interceptors.response.use(
   (error) => {
     // Handle errors globally
     if (error.response?.status === 401) {
-      // Unauthorized - redirect to login only if not already there
-      if (!window.location.pathname.startsWith('/auth')) {
+      // Public pages that don't require auth
+      const publicPaths = [
+        '/auth',
+        '/privacy-policy',
+        '/terms-and-conditions',
+        '/refund-policy',
+        '/disclaimer',
+        '/projects',
+        '/'
+      ];
+      
+      // Only redirect to /auth if not on a public page
+      const currentPath = window.location.pathname;
+      const isPublicPage = publicPaths.some(path => currentPath.startsWith(path));
+      
+      if (!isPublicPage) {
         window.location.href = '/auth';
       }
     }

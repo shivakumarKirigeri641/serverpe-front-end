@@ -47,13 +47,52 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/privacy-policy" className="text-gray-400 hover:text-primary-400 transition-colors">Privacy Policy</Link>
+                <a 
+                  href="/privacy-policy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('/privacy-policy', '_blank', 'noopener,noreferrer');
+                  }}
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
+                  Privacy Policy
+                </a>
               </li>
               <li>
-                <Link to="/terms-and-conditions" className="text-gray-400 hover:text-primary-400 transition-colors">Terms & Conditions</Link>
+                <a 
+                  href="/terms-and-conditions"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('/terms-and-conditions', '_blank', 'noopener,noreferrer');
+                  }}
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
+                  Terms & Conditions
+                </a>
               </li>
               <li>
-                <Link to="/refund-policy" className="text-gray-400 hover:text-primary-400 transition-colors">Refund Policy</Link>
+                <a 
+                  href="/refund-policy"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('/refund-policy', '_blank', 'noopener,noreferrer');
+                  }}
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
+                  Refund Policy
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="/disclaimer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.open('/disclaimer', '_blank', 'noopener,noreferrer');
+                  }}
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
+                  Disclaimer
+                </a>
               </li>
             </ul>
           </div>

@@ -4,6 +4,7 @@ import PublicNavbar from '../components/layout/PublicNavbar';
 import Footer from '../components/layout/Footer';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import Autocomplete from '../components/common/Autocomplete';
 import authService from '../services/authService';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
@@ -48,15 +49,6 @@ const AuthPage = () => {
     } else {
       fetchStates();
     }
-    
-    // Placeholder colleges - replace with API call when available
-    setColleges([
-      { id: 1, name: 'Acharya Institute of Technology' },
-      { id: 2, name: 'BMS College of Engineering' },
-      { id: 3, name: 'RV College of Engineering' },
-      { id: 4, name: 'PES University' },
-      { id: 5, name: 'MSRIT' },
-    ]);
   }, []);
 
   const fetchStates = async () => {
@@ -68,6 +60,43 @@ const AuthPage = () => {
       }
     } catch (error) {
       console.error('Error fetching states:', error);
+    }
+  };
+
+  const fetchColleges = async (stateId) => {
+    if (!stateId) {
+      setColleges([]);
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      const response = await api.get(`/serverpeuser/mystudents/colleges/${stateId}`);
+      if (response.data.success) {
+        setColleges(response.data.data.colleges);
+      }
+    } catch (error) {
+      console.error('Error fetching colleges:', error);
+      setError('Failed to load colleges. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStateChange = (e) => {
+    const selectedStateId = e.target.value;
+    setSubscribeData({
+      ...subscribeData,
+      stateId: selectedStateId,
+      collegeId: '', // Reset college selection when state changes
+    });
+    setError('');
+    
+    // Fetch colleges for the selected state
+    if (selectedStateId) {
+      fetchColleges(selectedStateId);
+    } else {
+      setColleges([]);
     }
   };
 
@@ -255,26 +284,6 @@ const AuthPage = () => {
                         required
                       />
 
-                      <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          College <span className="text-red-500">*</span>
-                        </label>
-                        <select
-                          name="collegeId"
-                          value={subscribeData.collegeId}
-                          onChange={handleSubscribeChange}
-                          required
-                          className="input-field"
-                        >
-                          <option value="">Select College</option>
-                          {colleges.map((college) => (
-                            <option key={college.id} value={college.id}>
-                              {college.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-
                       <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           State/Union Territory <span className="text-red-500">*</span>
@@ -282,7 +291,7 @@ const AuthPage = () => {
                         <select
                           name="stateId"
                           value={subscribeData.stateId}
-                          onChange={handleSubscribeChange}
+                          onChange={handleStateChange}
                           required
                           className="input-field"
                         >
@@ -293,6 +302,85 @@ const AuthPage = () => {
                             </option>
                           ))}
                         </select>
+                      </div>
+
+                      <Autocomplete
+                        label="College"
+                        name="collegeId"
+                        value={subscribeData.collegeId}
+                        onChange={handleSubscribeChange}
+                        options={colleges}
+                        placeholder={
+                          !subscribeData.stateId 
+                            ? 'Please select state first' 
+                            : colleges.length === 0 
+                            ? 'Loading colleges...' 
+                            : 'Start typing college name...'
+                        }
+                        displayKey="college_name"
+                        valueKey="id"
+                        required
+                        disabled={!subscribeData.stateId || colleges.length === 0}
+                      />
+
+                      <div className="border-t pt-4 mt-2 mb-4">
+                        <label className="flex items-start cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            required
+                            className="mt-1 h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          />
+                          <span className="ml-2 text-sm text-gray-600">
+                            I have understood, accept & agree to the{' '}
+                            <a 
+                              href="/terms-and-conditions"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open('/terms-and-conditions', '_blank', 'noopener,noreferrer');
+                              }}
+                              className="text-primary-600 hover:underline font-medium"
+                            >
+                              Terms & Conditions
+                            </a>
+                            ,{' '}
+                            <a 
+                              href="/privacy-policy"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open('/privacy-policy', '_blank', 'noopener,noreferrer');
+                              }}
+                              className="text-primary-600 hover:underline font-medium"
+                            >
+                              Privacy Policy
+                            </a>
+                            ,{' '}
+                            <a 
+                              href="/refund-policy"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open('/refund-policy', '_blank', 'noopener,noreferrer');
+                              }}
+                              className="text-primary-600 hover:underline font-medium"
+                            >
+                              Refund Policy
+                            </a>
+                            {' '}and{' '}
+                            <a 
+                              href="/disclaimer"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open('/disclaimer', '_blank', 'noopener,noreferrer');
+                              }}
+                              className="text-primary-600 hover:underline font-medium"
+                            >
+                              Disclaimer
+                            </a>
+                          </span>
+                        </label>
                       </div>
 
                       <Button type="submit" variant="primary" className="w-full" disabled={loading}>
@@ -372,6 +460,68 @@ const AuthPage = () => {
                       required
                       maxLength="6"
                     />
+                  )}
+
+                  {!showLoginOtp && (
+                    <div className="border-t pt-4 mt-2 mb-4">
+                      <label className="flex items-start cursor-pointer group">
+                        <input
+                          type="checkbox"
+                          required
+                          className="mt-1 h-4 w-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-600">
+                          I have understood, accept & agree to the{' '}
+                          <a 
+                            href="/terms-and-conditions"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.open('/terms-and-conditions', '_blank', 'noopener,noreferrer');
+                            }}
+                            className="text-primary-600 hover:underline font-medium"
+                          >
+                            Terms & Conditions
+                          </a>
+                          ,{' '}
+                          <a 
+                            href="/privacy-policy"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.open('/privacy-policy', '_blank', 'noopener,noreferrer');
+                            }}
+                            className="text-primary-600 hover:underline font-medium"
+                          >
+                            Privacy Policy
+                          </a>
+                          ,{' '}
+                          <a 
+                            href="/refund-policy"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.open('/refund-policy', '_blank', 'noopener,noreferrer');
+                            }}
+                            className="text-primary-600 hover:underline font-medium"
+                          >
+                            Refund Policy
+                          </a>
+                          {' '}and{' '}
+                          <a 
+                            href="/disclaimer"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              window.open('/disclaimer', '_blank', 'noopener,noreferrer');
+                            }}
+                            className="text-primary-600 hover:underline font-medium"
+                          >
+                            Disclaimer
+                          </a>
+                        </span>
+                      </label>
+                    </div>
                   )}
 
                   <Button type="submit" variant="primary" className="w-full" disabled={loading}>

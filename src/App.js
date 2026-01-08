@@ -12,6 +12,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import RefundPolicy from './pages/RefundPolicy';
 import TermsAndConditions from './pages/TermsAndConditions';
+import Disclaimer from './pages/Disclaimer';
 
 // Dashboard Pages
 import DashboardHome from './pages/dashboard/DashboardHome';
@@ -36,6 +37,7 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
 
           {/* Protected Dashboard Routes */}
           <Route
