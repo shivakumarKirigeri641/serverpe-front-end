@@ -50,6 +50,7 @@ const Profile = () => {
             states.find(s => s.state_name === response.data.state_name)?.id || '' : '',
         });
       }
+      console.log('profile:', response.data);
     } catch (error) {
       setError('Failed to load profile');
       console.error('Error fetching profile:', error);
@@ -327,6 +328,14 @@ const Profile = () => {
                       profile?.is_email_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {profile?.is_email_verified ? 'Verified' : 'Pending'}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-gray-600 text-sm mb-1">Mobile Number Verified</p>
+                    <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+                      profile?.is_mobile_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {profile?.is_mobile_verified ? 'Verified' : 'Pending'}
                     </span>
                   </div>
                 </div>
