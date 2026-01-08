@@ -19,8 +19,7 @@ const SummaryPage = () => {
   
   const [isProcessing, setIsProcessing] = useState(false);
   
-  const selectedPlan = location.state?.purchaseData;
-  // console.log(selectedPlan);
+  const selectedPlan = location.state?.purchaseData;  
 
   const [formData, setFormData] = useState({
     user_name: "",

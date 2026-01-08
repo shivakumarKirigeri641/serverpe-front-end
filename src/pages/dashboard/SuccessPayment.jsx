@@ -15,6 +15,7 @@ const SuccessPayment = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    //its calling 2 times?
     const verifyPayment = async () => {
       if (!orderDetails.paymentId) {
         setError('No payment ID found');
@@ -26,9 +27,7 @@ const SuccessPayment = () => {
         const response = await api.post('/serverpeuser/loggedinuser/razorpay/status', {
           razorpay_payment_id: orderDetails.paymentId,
           summaryFormData:orderDetails.formSummaryData
-        });
-        console.log('response.data:', response.data.data);
-
+        });        
         if (response.data.successstatus) {
           setPaymentData(response.data.data);
         } else {
@@ -43,7 +42,7 @@ const SuccessPayment = () => {
     };
 
     verifyPayment();
-  }, [orderDetails.paymentId]);
+  }, []);
 
   if (loading) {
     return (

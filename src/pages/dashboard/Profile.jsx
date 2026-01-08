@@ -50,7 +50,6 @@ const Profile = () => {
             states.find(s => s.state_name === response.data.state_name)?.id || '' : '',
         });
       }
-      console.log('profile:', response.data);
     } catch (error) {
       setError('Failed to load profile');
       console.error('Error fetching profile:', error);
