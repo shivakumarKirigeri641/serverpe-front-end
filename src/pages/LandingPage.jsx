@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaRocket, FaCheckCircle, FaCode, FaFileAlt, FaShieldAlt } from 'react-icons/fa';
+import { FaRocket, FaCheckCircle, FaCode, FaFileAlt, FaShieldAlt, FaStar, FaQuoteLeft } from 'react-icons/fa';
 import PublicNavbar from '../components/layout/PublicNavbar';
 import Footer from '../components/layout/Footer';
 import Card from '../components/common/Card';
@@ -11,6 +11,7 @@ import Loader from '../components/common/Loader';
 const LandingPage = () => {
   const [projects, setProjects] = useState([]);
   const [states, setStates] = useState([]);
+  const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -20,9 +21,10 @@ const LandingPage = () => {
 
   const fetchData = async () => {
     try {
-      const [projectsRes, statesRes] = await Promise.all([
+      const [projectsRes, statesRes, testimonialsRes] = await Promise.all([
         api.get('/serverpeuser/mystudents/project-list'),
         api.get('/serverpeuser/mystudents/states'),
+        api.get('/serverpeuser/mystudents/what-students-say'),
       ]);
 
       if (projectsRes.data.successstatus) {
@@ -32,6 +34,9 @@ const LandingPage = () => {
         setStates(statesRes.data.data);
         // Store states in sessionStorage for later use
         sessionStorage.setItem('states', JSON.stringify(statesRes.data.data));
+      }
+      if (testimonialsRes.data.successstatus) {
+        setTestimonials(testimonialsRes.data.data);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -71,11 +76,14 @@ const LandingPage = () => {
       <section className="hero-pattern py-20 px-4">
         <div className="container mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-gradient mb-6 animate-fade-in">
-            Premium Academic Project Solutions
+            India's Last Minute Demo Projects
           </h1>
+          <p className="text-2xl font-semibold text-primary-700 mb-4 animate-slide-up">
+            For CS & IS Students
+          </p>
           <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto animate-slide-up">
-            Experience realistic, dynamic projects similar to real-world scenarios 
-            for your demo/presentation that help accelerate your career path.
+            As an individual helping CS & IS students, I understand your concerns about last-minute projects, demos, and viva.
+            Get production-ready projects with complete documentation to ace your presentations!
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button 
@@ -195,6 +203,53 @@ const LandingPage = () => {
               View All Projects
             </Button>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 px-4 hero-pattern">
+        <div className="container mx-auto">
+          <h2 className="text-4xl font-bold text-center text-gradient mb-4">
+            What Students Say
+          </h2>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            Hear from students who successfully completed their demos and vivas with our projects
+          </p>
+          {loading ? (
+            <Loader size="lg" text="Loading testimonials..." />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {testimonials.slice(0, 6).map((testimonial, index) => (
+                <Card key={index} hover className="relative">
+                  <FaQuoteLeft className="text-4xl text-primary-200 absolute top-4 left-4 opacity-50" />
+                  <div className="pt-8">
+                    <div className="flex items-center mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar
+                          key={i}
+                          className={`${
+                            i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'
+                          } text-lg`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-gray-700 mb-4 italic">"{testimonial.message}"</p>
+                    <div className="border-t pt-4">
+                      <p className="font-semibold text-gray-900">{testimonial.user_name}</p>
+                      <p className="text-sm text-primary-600">{testimonial.category_name}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {new Date(testimonial.created_at).toLocaleDateString('en-IN', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
