@@ -1,0 +1,96 @@
+🔐 PRIVACY POLICY
+
+(ServerPe App Solutions / serverpe.in)
+
+Last updated: [add date]
+
+1. Introduction
+
+ServerPe App Solutions (“ServerPe”, “we”, “us”, “our”) respects your privacy and is committed to protecting the personal information of users accessing our website and services.
+
+This Privacy Policy explains how we collect, use, store, and protect your data when you use serverpe.in.
+
+2. Information We Collect
+
+We may collect the following information:
+
+a) Personal Information
+
+Name
+
+Email address
+
+Mobile number
+
+College name
+
+State
+
+Login and verification details (OTP-related)
+
+b) Technical Information
+
+Device and system details (used for license binding)
+
+IP address
+
+Browser and OS information
+
+Date & time of access
+
+c) Payment Information
+
+Payment transaction IDs
+
+Order references
+(We do NOT store card or UPI details. Payments are handled by secure third-party gateways.)
+
+3. Purpose of Data Collection
+
+Your data is collected only for:
+
+User authentication and verification
+
+Project licensing and system binding
+
+Demo coordination
+
+Invoice and GST compliance
+
+Customer support
+
+Legal and audit requirements
+
+4. Data Protection & Security
+
+We use reasonable technical and organizational safeguards
+
+License and system identifiers are used only to prevent misuse
+
+Access to data is restricted to authorized personnel only
+
+5. Data Sharing
+
+We do not sell or rent your personal data.
+
+Data may be shared only:
+
+With payment gateways (for transaction processing)
+
+When required by law or government authorities
+
+6. User Rights
+
+You may:
+
+Request profile updates (subject to verification rules)
+
+Request account deactivation
+
+Contact us for data-related queries
+
+📧 Email: support@serverpe.in
+
+7. Policy Updates
+
+ServerPe reserves the right to update this policy at any time. Continued use of the website implies acceptance of the updated policy.

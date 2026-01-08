@@ -1,52 +1,82 @@
 import React from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  
   return (
-    <footer className="bg-gray-900 text-white mt-20">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Brand */}
+    <footer className="bg-gray-900 text-white py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+          {/* Brand Info */}
           <div>
-            <h3 className="text-2xl font-bold text-gradient mb-4">ServerPe</h3>
+            <div className="flex items-center space-x-2 mb-4">
+              <img
+                src="/ServerPe_Logo.svg"
+                alt="ServerPe Logo"
+                className="h-10 w-10 brightness-0 invert"
+              />
+              <span className="text-2xl font-bold">ServerPe</span>
+            </div>
             <p className="text-gray-400">
-              Premium academic project solutions for CS/IS students. 
-              Real-world projects, comprehensive documentation, and professional support.
+              Premium academic project solutions for CSE students. Your success is our mission.
             </p>
           </div>
-          
+
           {/* Quick Links */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-gray-400">
-              <li><a href="/" className="hover:text-primary-400 transition-colors">Home</a></li>
-              <li><a href="/projects" className="hover:text-primary-400 transition-colors">Explore Projects</a></li>
-              <li><a href="/about" className="hover:text-primary-400 transition-colors">About Me</a></li>
-              <li><a href="/contact" className="hover:text-primary-400 transition-colors">Contact Me</a></li>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/" className="text-gray-400 hover:text-primary-400 transition-colors">Home</Link>
+              </li>
+              <li>
+                <Link to="/projects" className="text-gray-400 hover:text-primary-400 transition-colors">Projects</Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-400 hover:text-primary-400 transition-colors">About</Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-400 hover:text-primary-400 transition-colors">Contact</Link>
+              </li>
             </ul>
           </div>
-          
-          {/* Social Links */}
+
+          {/* Legal */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Connect With Us</h4>
-            <div className="flex space-x-4">
-              <a href="#" className="text-2xl hover:text-primary-400 transition-colors">
-                <FaGithub />
+            <h3 className="text-lg font-semibold mb-4">Legal</h3>
+            <ul className="space-y-2">
+              <li>
+                <Link to="/privacy-policy" className="text-gray-400 hover:text-primary-400 transition-colors">Privacy Policy</Link>
+              </li>
+              <li>
+                <Link to="/terms-and-conditions" className="text-gray-400 hover:text-primary-400 transition-colors">Terms & Conditions</Link>
+              </li>
+              <li>
+                <Link to="/refund-policy" className="text-gray-400 hover:text-primary-400 transition-colors">Refund Policy</Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social Links & Contact */}
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Connect With Us</h3>
+            <div className="flex space-x-4 mb-4">
+              <a href="https://facebook.com/serverpe" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary-400 transition-colors text-2xl">
+                <FaFacebook />
               </a>
-              <a href="#" className="text-2xl hover:text-primary-400 transition-colors">
-                <FaLinkedin />
-              </a>
-              <a href="#" className="text-2xl hover:text-primary-400 transition-colors">
+              <a href="https://twitter.com/serverpe" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary-400 transition-colors text-2xl">
                 <FaTwitter />
               </a>
-              <a href="#" className="text-2xl hover:text-primary-400 transition-colors">
-                <FaEnvelope />
+              <a href="https://instagram.com/serverpe" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary-400 transition-colors text-2xl">
+                <FaInstagram />
+              </a>
+              <a href="https://linkedin.com/company/serverpe" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary-400 transition-colors text-2xl">
+                <FaLinkedin />
               </a>
             </div>
-            <p className="text-gray-400 mt-4">
-              Email: support@serverpe.in
+            <p className="text-gray-400 text-sm">
+              📧 support@serverpe.in
             </p>
           </div>
         </div>

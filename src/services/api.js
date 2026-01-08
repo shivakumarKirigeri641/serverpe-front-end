@@ -27,8 +27,10 @@ api.interceptors.response.use(
   (error) => {
     // Handle errors globally
     if (error.response?.status === 401) {
-      // Unauthorized - redirect to login
-      window.location.href = '/auth';
+      // Unauthorized - redirect to login only if not already there
+      if (!window.location.pathname.startsWith('/auth')) {
+        window.location.href = '/auth';
+      }
     }
     return Promise.reject(error);
   }

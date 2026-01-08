@@ -26,7 +26,11 @@ const DashboardNavbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center space-x-2">
-            <FaCode className="text-3xl text-primary-600" />
+            <img 
+              src="/ServerPe_Logo.svg" 
+              alt="ServerPe Logo" 
+              className="h-10 w-10"
+            />
             <span className="text-2xl font-bold text-gradient">ServerPe</span>
           </Link>
           

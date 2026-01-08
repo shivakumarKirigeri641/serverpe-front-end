@@ -9,6 +9,9 @@ import AboutMe from './pages/AboutMe';
 import ContactMe from './pages/ContactMe';
 import AuthPage from './pages/AuthPage';
 import ProjectsPage from './pages/ProjectsPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import RefundPolicy from './pages/RefundPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
 
 // Dashboard Pages
 import DashboardHome from './pages/dashboard/DashboardHome';
@@ -22,7 +25,7 @@ import Profile from './pages/dashboard/Profile';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
@@ -30,6 +33,9 @@ function App() {
           <Route path="/contact" element={<ContactMe />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
 
           {/* Protected Dashboard Routes */}
           <Route
