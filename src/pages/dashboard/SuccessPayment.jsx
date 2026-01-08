@@ -4,29 +4,68 @@ import DashboardNavbar from '../../components/layout/DashboardNavbar';
 import Footer from '../../components/layout/Footer';
 import Button from '../../components/common/Button';
 import { FaCheckCircle, FaDownload, FaFileInvoice } from 'react-icons/fa';
+import api from '../../services/api';
 
 const SuccessPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [orderDetails] = useState(location.state || {});
+  const [paymentData, setPaymentData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    // In a real implementation, you would call an API here to:
-    // 1. Verify the payment
-    // 2. Create order record
-    // 3. Generate license key
-    // 4. Generate invoice
-    // Placeholder for API call
-    console.log('Payment successful, order created');
-  }, []);
+    const verifyPayment = async () => {
+      if (!orderDetails.paymentId) {
+        setError('No payment ID found');
+        setLoading(false);
+        return;
+      }
 
-  if (!orderDetails.project) {
+      try {
+        const response = await api.post('/serverpeuser/loggedinuser/razorpay/status', {
+          razorpay_payment_id: orderDetails.paymentId,
+          summaryFormData:orderDetails.formSummaryData
+        });
+        console.log('response.data:', response.data.data);
+
+        if (response.data.successstatus) {
+          setPaymentData(response.data.data);
+        } else {
+          setError('Payment verification failed');
+        }
+      } catch (error) {
+        console.error('Error verifying payment:', error);
+        setError('Failed to verify payment');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyPayment();
+  }, [orderDetails.paymentId]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <DashboardNavbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Verifying payment...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !orderDetails.formSummaryData?.project || !paymentData) {
     return (
       <div className="min-h-screen flex flex-col">
         <DashboardNavbar />
         <div className="flex-1 container mx-auto px-4 py-12">
           <div className="text-center">
-            <p className="text-red-600 text-xl">Invalid access!</p>
+            <p className="text-red-600 text-xl mb-4">{error || 'Invalid access!'}</p>
             <Button onClick={() => navigate('/dashboard')} className="mt-4">
               Go to Dashboard
             </Button>
@@ -36,22 +75,22 @@ const SuccessPayment = () => {
     );
   }
 
-  const { project, paymentId, orderId } = orderDetails;
-  const basePrice = parseFloat(project.base_price);
-  const gstAmount = (basePrice * parseFloat(project.gst_percent)) / 100;
-  const totalPaid = basePrice + gstAmount;
-
-  // Mock order number - would come from backend
-  const orderNumber = `ORD-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
+  const project = orderDetails.formSummaryData.project;
+  const basePrice = parseFloat(paymentData.order.total_amount);
+  const gstAmount = parseFloat(paymentData.order.gst_amount);
+  const totalPaid = parseFloat(paymentData.order.payable_amount);
+  const orderNumber = paymentData.order.order_number;
+  const licenseKey = paymentData.license.license_key;
+  const paymentDate = new Date(paymentData.order.created_at).toLocaleDateString('en-IN');
 
   const handleDownloadProject = () => {
-    // Placeholder for download functionality
-    alert('Download functionality will be implemented with backend API');
+    // TODO: Implement with actual download API using license key
+    alert(`Download project with license key: ${licenseKey}`);
   };
 
   const handleDownloadInvoice = () => {
-    // Placeholder for invoice download
-    alert('Invoice download will be implemented with backend API');
+    // TODO: Implement with actual invoice download API
+    alert(`Download invoice for order: ${orderNumber}`);
   };
 
   return (
@@ -118,15 +157,23 @@ const SuccessPayment = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   <div>
                     <span className="text-gray-600">Payment ID:</span>
-                    <p className="font-mono text-xs break-all">{paymentId || 'XXXXXXXXXXXXXXXX'}</p>
+                    <p className="font-mono text-xs break-all">{orderDetails.paymentId}</p>
                   </div>
                   <div>
-                    <span className="text-gray-600">Order ID:</span>
-                    <p className="font-mono text-xs break-all">{orderId || 'XXXXXXXXXXXXXXXX'}</p>
+                    <span className="text-gray-600">Order Number:</span>
+                    <p className="font-mono text-xs break-all">{orderNumber}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">License Key:</span>
+                    <p className="font-mono text-xs break-all text-primary-600 font-semibold">{licenseKey}</p>
+                  </div>
+                  <div>
+                    <span className="text-gray-600">Payment Status:</span>
+                    <p className="font-semibold text-green-600">{paymentData.order.order_status}</p>
                   </div>
                   <div>
                     <span className="text-gray-600">Payment Date:</span>
-                    <p className="font-semibold">{new Date().toLocaleDateString()}</p>
+                    <p className="font-semibold">{paymentDate}</p>
                   </div>
                   <div>
                     <span className="text-gray-600">Payment Method:</span>

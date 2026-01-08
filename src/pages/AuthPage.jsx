@@ -30,8 +30,8 @@ const AuthPage = () => {
   });
 
   // Login state
-  const [loginInput, setLoginInput] = useState('');
-  const [loginOtp, setLoginOtp] = useState('');
+  const [loginInput, setLoginInput] = useState('shivakumar641@gmail.com');
+  const [loginOtp, setLoginOtp] = useState('1234');
   const [showLoginOtp, setShowLoginOtp] = useState(false);
 
   // Common state

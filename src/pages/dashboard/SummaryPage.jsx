@@ -5,15 +5,46 @@ import Footer from '../../components/layout/Footer';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../contexts/AuthContext';
 import { FaShieldAlt } from 'react-icons/fa';
+import api from '../../services/api';
 
 const SummaryPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
   
-  const [project] = useState(location.state?.project || null);
-  const [loading, setLoading] = useState(false);
+  const [projectId] = useState(location.state?.projectId || null);
+  const [project, setProject] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
+  const [totalPayment, setTotalPayment] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchPurchaseDetails = async () => {
+      if (!projectId) {
+        setError('No project selected');
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await api.get(`/serverpeuser/loggedinstudent/purchase-details/${projectId}`);
+        
+        if (response.data.successstatus) {
+          setProject(response.data.data.project_details);
+          setUserDetails(response.data.data.user_details);
+          setTotalPayment(response.data.data.total_payment);
+        }
+      } catch (error) {
+        console.error('Error fetching purchase details:', error);
+        setError('Failed to load purchase details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPurchaseDetails();
+  }, [projectId]);
 
   useEffect(() => {
     // Load Razorpay script
@@ -27,13 +58,27 @@ const SummaryPage = () => {
     };
   }, []);
 
-  if (!project) {
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <DashboardNavbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading purchase details...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!project || error) {
     return (
       <div className="min-h-screen flex flex-col">
         <DashboardNavbar />
         <div className="flex-1 container mx-auto px-4 py-12">
           <div className="text-center">
-            <p className="text-red-600 text-xl">No project data found!</p>
+            <p className="text-red-600 text-xl mb-4">{error || 'No project data found!'}</p>
             <Button onClick={() => navigate('/dashboard/explore-projects')} className="mt-4">
               Back to Projects
             </Button>
@@ -46,7 +91,7 @@ const SummaryPage = () => {
   const basePrice = parseFloat(project.base_price);
   const gstPercent = parseFloat(project.gst_percent);
   const gstAmount = (basePrice * gstPercent) / 100;
-  const totalAmount = basePrice + gstAmount;
+  const totalAmount = totalPayment; // Use API calculated total
 
   const handlePayment = async () => {
     setLoading(true);
@@ -72,10 +117,8 @@ const SummaryPage = () => {
           // Navigate to success page with order details
           navigate('/dashboard/payment-success', {
             state: {
-              project,
               paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id,
-              signature: response.razorpay_signature,
+              formSummaryData:{userDetails, project, totalPayment}
             },
           });
         },
@@ -126,27 +169,27 @@ const SummaryPage = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-gray-600 text-sm">Full Name</p>
-                  <p className="font-semibold">{user?.user_name}</p>
+                  <p className="font-semibold">{userDetails?.user_name || user?.user_name}</p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">Email Address</p>
-                  <p className="font-semibold">{user?.email}</p>
+                  <p className="font-semibold">{userDetails?.email || user?.email}</p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">Mobile Number</p>
-                  <p className="font-semibold">{user?.mobile_number}</p>
+                  <p className="font-semibold">{userDetails?.mobile_number || user?.mobile_number}</p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">Branch</p>
-                  <p className="font-semibold">{user?.branch || 'Not specified'}</p>
+                  <p className="font-semibold">{userDetails?.branch || user?.branch || 'Not specified'}</p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">College</p>
-                  <p className="font-semibold">{user?.college_name || 'Not specified'}</p>
+                  <p className="font-semibold">{userDetails?.college_name || user?.college_name || 'Not specified'}</p>
                 </div>
                 <div>
                   <p className="text-gray-600 text-sm">State</p>
-                  <p className="font-semibold">{user?.state_name || 'Not specified'}</p>
+                  <p className="font-semibold">{userDetails?.state_name || user?.state_name || 'Not specified'}</p>
                 </div>
               </div>
             </div>
