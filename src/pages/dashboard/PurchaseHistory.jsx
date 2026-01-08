@@ -29,14 +29,50 @@ const PurchaseHistory = () => {
     }
   };
 
-  const handleDownloadProject = (purchase) => {
-    // Placeholder for download functionality
-    alert(`Download project: ${purchase.project_title}`);
+  const handleDownloadProject = async (purchase) => {
+    try {
+      const response = await api.get(
+        `/serverpeuser/loggedinuser/project/download/${purchase.license_key}`,
+        { responseType: 'blob' }
+      );
+      
+      // Create a download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `${purchase.project_title.replace(/\s+/g, '_')}_${purchase.license_key}.zip`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading project:', error);
+      setError('Failed to download project. Please try again or contact support@serverpe.in.');
+      setTimeout(() => setError(''), 5000);
+    }
   };
 
-  const handleDownloadInvoice = (purchase) => {
-    // In real implementation, download from purchase.invoice_pdf_path
-    alert(`Download invoice: ${purchase.invoice_number}`);
+  const handleDownloadInvoice = async (purchase) => {
+    try {
+      const response = await api.get(
+        `/serverpeuser/loggedinuser/invoice/download/${purchase.invoice_id}`,
+        { responseType: 'blob' }
+      );
+      
+      // Create a download link
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Invoice_${purchase.invoice_number}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      setError('Failed to download invoice. Please try again.');
+      setTimeout(() => setError(''), 5000);
+    }
   };
 
   if (loading) {
