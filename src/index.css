@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import animations */
+@import './styles/animations.css';
+
 /* Root Variables */
 :root {
   --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

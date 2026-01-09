@@ -29,7 +29,7 @@ const PurchaseDetails = () => {
       const response = await api.get('/serverpeuser/mystudents/disclaimer-before-buy-list');
       if (response.data.successstatus) {
         setDisclaimers(response.data.data);
-      }
+      }      
     } catch (error) {
       setError('Failed to load disclaimers');
       console.error('Error fetching disclaimers:', error);
@@ -72,7 +72,7 @@ const PurchaseDetails = () => {
       </div>
     );
   }
-
+console.log('purchase deatils:', projectFromState)  ;
   return (
     <div className="min-h-screen flex flex-col">
       <DashboardNavbar />

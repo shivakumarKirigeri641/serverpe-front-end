@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardNavbar from '../../components/layout/DashboardNavbar';
 import Footer from '../../components/layout/Footer';
 import Button from '../../components/common/Button';
@@ -7,6 +8,7 @@ import api from '../../services/api';
 import { FaDownload, FaFileInvoice, FaCalendar, FaCreditCard } from 'react-icons/fa';
 
 const PurchaseHistory = () => {
+  const navigate = useNavigate();
   const [purchases, setPurchases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -109,7 +111,7 @@ const PurchaseHistory = () => {
             <p className="text-gray-600 text-lg mb-6">
               You haven't purchased any projects yet.
             </p>
-            <Button onClick={() => window.location.href = '/dashboard/explore-projects'}>
+            <Button onClick={() => navigate('/dashboard/explore-projects')}>
               Explore Projects
             </Button>
           </div>
