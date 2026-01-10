@@ -53,6 +53,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (userData) => {
+    console.log('🔐 Login - User Data Received:', userData);
+    console.log('🔐 Is Admin?', userData?.is_admin);
     setUser(userData);
     setIsAuthenticated(true);
   };
@@ -71,6 +73,7 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     isAuthenticated,
+    isAdmin: user?.is_admin || false,
     login,
     logout,
     checkAuth,

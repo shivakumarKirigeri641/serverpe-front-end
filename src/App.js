@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
 
 // Public Pages
 import LandingPage from './pages/LandingPage';
@@ -22,6 +23,14 @@ import SummaryPage from './pages/dashboard/SummaryPage';
 import SuccessPayment from './pages/dashboard/SuccessPayment';
 import PurchaseHistory from './pages/dashboard/PurchaseHistory';
 import Profile from './pages/dashboard/Profile';
+
+// Admin Pages
+import AdminDashboard from './pages/admin/AdminDashboard';
+import LicenseManagement from './pages/admin/LicenseManagement';
+import LicenseDetails from './pages/admin/LicenseDetails';
+import UserManagement from './pages/admin/UserManagement';
+import UserDetails from './pages/admin/UserDetails';
+import SystemHealth from './pages/admin/SystemHealth';
 
 function App() {
   return (
@@ -97,6 +106,56 @@ function App() {
             }
           />
 
+          {/* Admin Protected Routes */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminProtectedRoute>
+                <AdminDashboard />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/licenses"
+            element={
+              <AdminProtectedRoute>
+                <LicenseManagement />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/licenses/:license_key"
+            element={
+              <AdminProtectedRoute>
+                <LicenseDetails />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminProtectedRoute>
+                <UserManagement />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users/:user_id"
+            element={
+              <AdminProtectedRoute>
+                <UserDetails />
+              </AdminProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/system"
+            element={
+              <AdminProtectedRoute>
+                <SystemHealth />
+              </AdminProtectedRoute>
+            }
+          />
+
           {/* Catch all - redirect to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
@@ -106,3 +165,4 @@ function App() {
 }
 
 export default App;
+

@@ -183,7 +183,12 @@ const AuthPage = () => {
       
       if (response.successstatus) {
         await login(response.data);
-        const from = location.state?.from?.pathname || '/dashboard';
+        
+        // Redirect admin users to admin dashboard, regular users to user dashboard
+        const isAdmin = response.data?.is_admin || false;
+        const defaultPath = isAdmin ? '/admin/dashboard' : '/dashboard';
+        const from = location.state?.from?.pathname || defaultPath;
+        
         navigate(from, { replace: true });
       }
     } catch (error) {
