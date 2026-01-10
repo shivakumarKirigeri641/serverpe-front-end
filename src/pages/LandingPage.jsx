@@ -90,12 +90,12 @@ const LandingPage = () => {
               </div>
               <p className="text-red-700 font-medium text-center">
                 Meanwhile, your suggestions are welcome at{' '}
-                <a 
-                  href="mailto:support@serverpe.in" 
-                  className="text-red-800 underline hover:text-red-900 font-bold transition-colors"
+                <button 
+                  onClick={() => navigate('/contact')}
+                  className="text-red-800 underline hover:text-red-900 font-bold transition-colors cursor-pointer"
                 >
                   support@serverpe.in
-                </a>
+                </button>
               </p>
             </div>
           </div>
