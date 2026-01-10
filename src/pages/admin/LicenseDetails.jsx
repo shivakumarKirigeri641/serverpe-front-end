@@ -57,12 +57,12 @@ const LicenseDetails = () => {
   };
 
   const handleToggleStatus = async () => {
-    const action = details.license.status === 'ACTIVE' ? 'deactivate' : 'activate';
+    const action = details.license.status === true ? 'deactivate' : 'activate';
     if (!window.confirm(`Are you sure you want to ${action} this license?`)) return;
 
     try {
       setActionLoading(true);
-      const response = details.license.status === 'ACTIVE'
+      const response = details.license.status === true
         ? await adminService.deactivateLicense(license_key)
         : await adminService.activateLicense(license_key);
       
@@ -143,13 +143,13 @@ const LicenseDetails = () => {
             onClick={handleToggleStatus}
             disabled={actionLoading}
             className={`btn flex items-center gap-2 text-white ${
-              details?.license?.status === 'ACTIVE'
+              details?.license?.status === true
                 ? 'bg-red-600 hover:bg-red-700'
                 : 'bg-green-600 hover:bg-green-700'
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            {details?.license?.status === 'ACTIVE' ? <FaTimes /> : <FaCheck />}
-            {details?.license?.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
+            {details?.license?.status === true ? <FaTimes /> : <FaCheck />}
+            {details?.license?.status === true ? 'Deactivate' : 'Activate'}
           </button>
         </div>
 

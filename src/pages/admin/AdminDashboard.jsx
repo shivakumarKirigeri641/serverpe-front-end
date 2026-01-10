@@ -164,13 +164,6 @@ const AdminDashboard = () => {
             subtitle={`Avg: ₹${(analytics?.revenue?.average_order_value || 0).toLocaleString()}`}
             variant="success"
           />
-          <AdminStatsCard
-            icon={FaCheckCircle}
-            title="Active Licenses"
-            value={analytics?.licenses?.active || 0}
-            subtitle={`${analytics?.licenses?.bound_to_device || 0} bound to devices`}
-            variant="accent"
-          />
         </div>
 
         {/* Secondary Stats Row */}

@@ -99,12 +99,12 @@ const LicenseManagement = () => {
   };
 
   const handleToggleStatus = async (licenseKey, currentStatus) => {
-    const action = currentStatus === 'ACTIVE' ? 'deactivate' : 'activate';
+    const action = currentStatus === true ? 'deactivate' : 'activate';
     if (!window.confirm(`Are you sure you want to ${action} this license?`)) return;
 
     try {
       setActionLoading(licenseKey);
-      const response = currentStatus === 'ACTIVE' 
+      const response = currentStatus === true 
         ? await adminService.deactivateLicense(licenseKey)
         : await adminService.activateLicense(licenseKey);
       
@@ -194,13 +194,13 @@ const LicenseManagement = () => {
             onClick={() => handleToggleStatus(row.license_key, row.status)}
             disabled={actionLoading === row.license_key}
             className={`p-2 rounded transition-colors ${
-              row.status === 'ACTIVE' 
+              row.status === true 
                 ? 'text-red-600 hover:bg-red-50' 
                 : 'text-green-600 hover:bg-green-50'
             } disabled:opacity-50 disabled:cursor-not-allowed`}
-            title={row.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
+            title={row.status === true ? 'Deactivate' : 'Activate'}
           >
-            {row.status === 'ACTIVE' ? <FaTimes /> : <FaCheck />}
+            {row.status === true ? <FaTimes /> : <FaCheck />}
           </button>
         </div>
       ),
