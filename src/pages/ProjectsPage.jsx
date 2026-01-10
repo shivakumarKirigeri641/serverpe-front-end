@@ -7,6 +7,7 @@ import Button from '../components/common/Button';
 import Loader from '../components/common/Loader';
 import api from '../services/api';
 import { FaCode, FaLaptopCode } from 'react-icons/fa';
+import SEO from '../components/SEO/SEO';
 
 const ProjectsPage = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const ProjectsPage = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await api.get('/serverpeuser/mystudents/project-list');
+      const response = await api.get('/serverpeuser/mystudents/project-list', {withCredentials:true});
       if (response.data.successstatus) {
         setProjects(response.data.data);
       }
@@ -49,6 +50,12 @@ const ProjectsPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Browse Projects"
+        description="Explore our complete collection of production-ready demo projects for Computer Science and Information Science students. Various technologies and difficulty levels available."
+        keywords="project list, demo projects, student projects, CS projects, IS projects, technology projects, college projects India"
+        url="https://serverpe.in/projects"
+      />
       <PublicNavbar />
       
       <div className="flex-1 container mx-auto px-4 py-12">

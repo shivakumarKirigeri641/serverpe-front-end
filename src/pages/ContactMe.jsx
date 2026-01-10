@@ -5,6 +5,7 @@ import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import api from '../services/api';
 import { FaEnvelope, FaUser, FaCommentDots } from 'react-icons/fa';
+import SEO from '../components/SEO/SEO';
 
 const ContactMe = () => {
   const [categories, setCategories] = useState([]);
@@ -67,6 +68,19 @@ const ContactMe = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="Contact Us"
+        description="Get in touch with ServerPe for project inquiries, support, or suggestions. We're here to help CS and IS students with their demo project needs."
+        keywords="contact serverpe, project support, customer service, project inquiries"
+        url="https://serverpe.in/contact"
+        type="website"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          name: 'Contact ServerPe',
+          description: 'Contact form for ServerPe support and inquiries',
+        }}
+      />
       <PublicNavbar />
       
       <div className="container mx-auto px-4 py-16">

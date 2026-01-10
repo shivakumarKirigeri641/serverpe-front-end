@@ -7,6 +7,8 @@ import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import api from '../services/api';
 import Loader from '../components/common/Loader';
+import SEO from '../components/SEO/SEO';
+import { getOrganizationSchema, getWebSiteSchema, getServiceSchema } from '../utils/structuredData';
 
 const LandingPage = () => {
   const [projects, setProjects] = useState([]);
@@ -70,6 +72,20 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen">
+      <SEO
+        title="ServerPe - Last Minute Demo Projects for CS & IS Students"
+        description="Get production-ready demo projects with complete documentation for your college presentations. Real-world projects for Computer Science students in India. Professional support for demos and vivas."
+        keywords="demo projects, college projects, CS projects, IS projects, final year projects, student projects India, computer science projects, information science projects, last minute projects, project documentation"
+        url="https://serverpe.in"
+        image="https://serverpe.in/og-image.jpg"
+        structuredData={{
+          '@graph': [
+            getOrganizationSchema(),
+            getWebSiteSchema(),
+            getServiceSchema(),
+          ],
+        }}
+      />
       <PublicNavbar />
       
       {/* Hero Section */}

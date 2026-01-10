@@ -3,10 +3,17 @@ import PublicNavbar from '../components/layout/PublicNavbar';
 import Footer from '../components/layout/Footer';
 import { FaGraduationCap, FaCode, FaHeart, FaLightbulb } from 'react-icons/fa';
 import Card from '../components/common/Card';
+import SEO from '../components/SEO/SEO';
 
 const AboutMe = () => {
   return (
     <div className="min-h-screen">
+      <SEO
+        title="About ServerPe"
+        description="Learn about ServerPe and how we help Computer Science and Information Science students with last-minute demo projects, presentations, and viva support."
+        keywords="about serverpe, demo project help, CS student support, project documentation service"
+        url="https://serverpe.in/about"
+      />
       <PublicNavbar />
       
       <div className="container mx-auto px-4 py-16">
