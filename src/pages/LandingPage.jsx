@@ -78,6 +78,28 @@ const LandingPage = () => {
           <h1 className="text-5xl md:text-6xl font-bold text-gradient mb-6 animate-fade-in">
             India's Last Minute Demo Projects
           </h1>
+          
+          {/* Testing Banner */}
+          <div className="max-w-4xl mx-auto mb-6 animate-slide-up">
+            <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 shadow-lg">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="inline-block w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                <h2 className="text-lg md:text-xl font-bold text-red-700">
+                  🚧 Testing in Progress - Launching Soon! 🚧
+                </h2>
+              </div>
+              <p className="text-red-700 font-medium text-center">
+                Meanwhile, your suggestions are welcome at{' '}
+                <a 
+                  href="mailto:support@serverpe.in" 
+                  className="text-red-800 underline hover:text-red-900 font-bold transition-colors"
+                >
+                  support@serverpe.in
+                </a>
+              </p>
+            </div>
+          </div>
+          
           <p className="text-2xl font-semibold text-primary-700 mb-4 animate-slide-up">
             For CS & IS Students
           </p>
