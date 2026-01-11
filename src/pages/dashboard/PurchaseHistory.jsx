@@ -19,7 +19,7 @@ const PurchaseHistory = () => {
 
   const fetchPurchaseHistory = async () => {
     try {
-      const response = await api.get('/serverpeuser/loggedinstudent/purchase-history');
+      const response = await api.get('/serverpeuser/loggedinstudent/purchase-history', {withCredentials:true});
       if (response.data.successstatus) {
         setPurchases(response.data.data);
       }
@@ -35,7 +35,7 @@ const PurchaseHistory = () => {
     try {
       const response = await api.get(
         `/serverpeuser/loggedinuser/project/download/${purchase.license_key}`,
-        { responseType: 'blob' }
+        { responseType: 'blob' , withCredentials:true}
       );
       
       // Create a download link

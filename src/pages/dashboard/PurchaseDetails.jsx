@@ -26,7 +26,7 @@ const PurchaseDetails = () => {
 
   const fetchDisclaimers = async () => {
     try {
-      const response = await api.get('/serverpeuser/mystudents/disclaimer-before-buy-list');
+      const response = await api.get('/serverpeuser/mystudents/disclaimer-before-buy-list', {withCredentials:true});
       if (response.data.successstatus) {
         setDisclaimers(response.data.data);
       }      

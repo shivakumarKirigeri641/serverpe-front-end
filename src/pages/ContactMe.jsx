@@ -25,7 +25,7 @@ const ContactMe = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get('/serverpeuser/mystudents/contact-categories');
+      const response = await api.get('/serverpeuser/mystudents/contact-categories', {withCredentials:true});
       if (response.data.successstatus) {
         setCategories(response.data.data);
       }

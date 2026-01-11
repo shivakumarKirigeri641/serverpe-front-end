@@ -30,8 +30,8 @@ const AuthPage = () => {
   });
 
   // Login state
-  const [loginInput, setLoginInput] = useState('shivakumar641@gmail.com');
-  const [loginOtp, setLoginOtp] = useState('1234');
+  const [loginInput, setLoginInput] = useState('');
+  const [loginOtp, setLoginOtp] = useState('');
   const [showLoginOtp, setShowLoginOtp] = useState(false);
 
   // Common state
@@ -53,7 +53,7 @@ const AuthPage = () => {
 
   const fetchStates = async () => {
     try {
-      const response = await api.get('/serverpeuser/mystudents/states');
+      const response = await api.get('/serverpeuser/mystudents/states', {withCredentials:true});
       if (response.data.success) {
         setStates(response.data.data);
         sessionStorage.setItem('states', JSON.stringify(response.data.data));
@@ -71,7 +71,7 @@ const AuthPage = () => {
     
     try {
       setLoading(true);
-      const response = await api.get(`/serverpeuser/mystudents/colleges/${stateId}`);
+      const response = await api.get(`/serverpeuser/mystudents/colleges/${stateId}`, {withCredentials:true});
       if (response.data.success) {
         setColleges(response.data.data.colleges);
       }

@@ -28,7 +28,7 @@ const SummaryPage = () => {
       }
 
       try {
-        const response = await api.get(`/serverpeuser/loggedinstudent/purchase-details/${projectId}`);
+        const response = await api.get(`/serverpeuser/loggedinstudent/purchase-details/${projectId}`, {withCredentials:true});
         
         if (response.data.successstatus) {
           setProject(response.data.data.project_details);

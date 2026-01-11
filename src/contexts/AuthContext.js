@@ -52,9 +52,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (userData) => {
-    console.log('🔐 Login - User Data Received:', userData);
-    console.log('🔐 Is Admin?', userData?.is_admin);
+  const login = async (userData) => {    
     setUser(userData);
     setIsAuthenticated(true);
   };

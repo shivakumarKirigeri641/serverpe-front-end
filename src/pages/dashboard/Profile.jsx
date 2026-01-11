@@ -64,7 +64,7 @@ const Profile = () => {
       if (cachedStates) {
         setStates(JSON.parse(cachedStates));
       } else {
-        const response = await api.get('/serverpeuser/mystudents/states');
+        const response = await api.get('/serverpeuser/mystudents/states', {withCredentials:true});
         if (response.data.success) {
           setStates(response.data.data);
           sessionStorage.setItem('states', JSON.stringify(response.data.data));

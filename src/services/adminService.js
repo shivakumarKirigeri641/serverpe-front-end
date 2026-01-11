@@ -8,7 +8,7 @@ const adminService = {
    * Includes users, licenses, revenue, sales, downloads
    */
   getAnalyticsOverview: async () => {
-    const response = await api.get('/admin/analytics/overview');
+    const response = await api.get('/admin/analytics/overview', {withCredentials:true});
     return response.data;
   },
 
@@ -25,7 +25,7 @@ const adminService = {
     if (bound !== undefined) params.bound = bound;
     if (search) params.search = search;
     
-    const response = await api.get('/admin/licenses', { params });
+    const response = await api.get('/admin/licenses', { params }, {withCredentials:true});
     return response.data;
   },
 
@@ -34,7 +34,7 @@ const adminService = {
    * @param {string} licenseKey - License key
    */
   getLicenseDetails: async (licenseKey) => {
-    const response = await api.get(`/admin/licenses/${licenseKey}`);
+    const response = await api.get(`/admin/licenses/${licenseKey}`, {withCredentials:true});
     return response.data;
   },
 
@@ -52,7 +52,7 @@ const adminService = {
    * @param {string} licenseKey - License key to activate
    */
   activateLicense: async (licenseKey) => {
-    const response = await api.post(`/admin/licenses/${licenseKey}/activate`);
+    const response = await api.post(`/admin/licenses/${licenseKey}/activate`, {withCredentials:true});
     return response.data;
   },
 
@@ -61,7 +61,7 @@ const adminService = {
    * @param {string} licenseKey - License key to deactivate
    */
   deactivateLicense: async (licenseKey) => {
-    const response = await api.post(`/admin/licenses/${licenseKey}/deactivate`);
+    const response = await api.post(`/admin/licenses/${licenseKey}/deactivate`, {withCredentials:true});
     return response.data;
   },
 
@@ -76,7 +76,7 @@ const adminService = {
     const params = { page, limit };
     if (search) params.search = search;
     
-    const response = await api.get('/admin/users', { params });
+    const response = await api.get('/admin/users', { params } , {withCredentials:true});
     return response.data;
   },
 
@@ -85,7 +85,7 @@ const adminService = {
    * @param {number} userId - User ID
    */
   getUserPurchases: async (userId) => {
-    const response = await api.get(`/admin/users/${userId}/purchases`);
+    const response = await api.get(`/admin/users/${userId}/purchases`, {withCredentials:true});
     return response.data;
   },
 
@@ -94,7 +94,7 @@ const adminService = {
    * @param {number} userId - User ID to grant admin
    */
   grantAdminPrivileges: async (userId) => {
-    const response = await api.post(`/admin/users/${userId}/make-admin`);
+    const response = await api.post(`/admin/users/${userId}/make-admin`, {withCredentials:true});
     return response.data;
   },
 
@@ -103,7 +103,7 @@ const adminService = {
    * @param {number} userId - User ID to revoke admin
    */
   revokeAdminPrivileges: async (userId) => {
-    const response = await api.post(`/admin/users/${userId}/remove-admin`);
+    const response = await api.post(`/admin/users/${userId}/remove-admin`, {withCredentials:true});
     return response.data;
   },
 
@@ -113,7 +113,7 @@ const adminService = {
    * Check system health and database connectivity
    */
   getSystemHealth: async () => {
-    const response = await api.get('/admin/system/health');
+    const response = await api.get('/admin/system/health', {withCredentials:true});
     return response.data;
   },
 };

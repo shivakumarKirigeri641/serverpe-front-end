@@ -19,7 +19,7 @@ const ExploreProjects = () => {
 
   const fetchProjects = async () => {
     try {
-      const response = await api.get('/serverpeuser/mystudents/project-list');
+      const response = await api.get('/serverpeuser/mystudents/project-list', {withCredentials:true});
       if (response.data.successstatus) {
         setProjects(response.data.data);
       }
