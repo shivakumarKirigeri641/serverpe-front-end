@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   ServerPe – Global Styles (Dark Theme)
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background: #0B0F1A;
+  color: #E2E8F0;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(46, 111, 255, 0.3);
+  color: #ffffff;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0B0F1A; }
+::-webkit-scrollbar-thumb { background: #1A2544; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #2e3f6e; }
+
+/* ============================================
+   Film-grain overlay
+   ============================================ */
+.noise-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* ============================================
+   Gradient text
+   ============================================ */
+.gradient-text {
+  background: linear-gradient(135deg, #4F8EFF 0%, #22d3ee 55%, #34D399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   Glass / dark cards
+   ============================================ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dark-card {
+  background: #0F1321;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ============================================
+   Section divider
+   ============================================ */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.06) 80%, transparent);
+}
+
+/* ============================================
+   Dot grid pattern
+   ============================================ */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ============================================
+   Keyframes
+   ============================================ */
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* ============================================
+   Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   Legal Content (Privacy Policy / Terms)
+   ============================================ */
+.legal-content {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.legal-content h1,
+.legal-content h2,
+.legal-content h3,
+.legal-content h4 {
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.legal-content h1 { font-size: 1.6rem; }
+.legal-content h2 { font-size: 1.25rem; }
+.legal-content h3 { font-size: 1.05rem; }
+
+.legal-content p {
+  margin-bottom: 1.1rem;
+}
+
+.legal-content ul,
+.legal-content ol {
+  margin: 0.75rem 0 1.25rem 1.5rem;
+}
+
+.legal-content li {
+  margin-bottom: 0.4rem;
+}
+
+.legal-content a {
+  color: #4F8EFF;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.legal-content a:hover {
+  color: #82AEFF;
+}
+
+.legal-content strong,
+.legal-content b {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+.legal-content hr {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  margin: 2.5rem 0;
+}
+
+.legal-content blockquote {
+  border-left: 3px solid rgba(79, 142, 255, 0.4);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+}
+
+.legal-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 13px;
+}
+
+.legal-content th {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.legal-content td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
