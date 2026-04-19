@@ -26,12 +26,16 @@ export const submitContactQuery = async (formData) => {
 };
 
 export const getPrivacyPolicy = async () => {
-  const response = await apiClient.get("/privacy-policy");
+  const response = await apiClient.get(
+    "/serverpe/platform/public/privacy-policy",
+  );
   return response.data;
 };
 
 export const getTermsAndConditions = async () => {
-  const response = await apiClient.get("/terms-and-conditions");
+  const response = await apiClient.get(
+    "/serverpe/platform/public/terms-and-conditions",
+  );
   return response.data;
 };
 

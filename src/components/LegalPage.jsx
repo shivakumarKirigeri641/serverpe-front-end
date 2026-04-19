@@ -43,9 +43,18 @@ const LegalPage = ({ title, subtitle, fetchFn, accentColor = '#4F8EFF' }) => {
     try {
       const data = await fetchFn();
       if (data.successstatus && data.data) {
-        // Support both `content` string and `data` string responses
-        setContent(data.data.content ?? data.data);
-        setLastUpdated(data.data.last_updated ?? data.data.updated_at ?? null);
+        // Handle array response from API
+        if (Array.isArray(data.data)) {
+          // Format array of objects into HTML content
+          const formattedContent = data.data
+            .map(item => `<section style="margin-bottom: 2rem;"><h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">${item.title}</h3><div style="line-height: 1.6; color: #e0e0e0;">${item.description}</div></section>`)
+            .join('');
+          setContent(formattedContent);
+        } else {
+          // Handle object response with content property
+          setContent(data.data.content ?? data.data);
+          setLastUpdated(data.data.last_updated ?? data.data.updated_at ?? null);
+        }
       } else {
         setError(data.message || 'Failed to load content. Please try again.');
       }
