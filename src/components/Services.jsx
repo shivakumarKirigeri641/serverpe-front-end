@@ -52,7 +52,7 @@ const services = [
   {
     id: 'roles', icon: HiUsers, label: 'Role-Based Access',
     headline: 'Granular permissions and admin panels',
-    description: 'User role-based applications with fine-grained permissions, multi-level admin panels, and secure access control — built for teams of any size.',
+    description: 'User role-based applications with fine-grained permissions, multi-level admin panels, and secure access control — built for operations of any size.',
     accent: '#10B981', visual: 'roles',
   },
 ];

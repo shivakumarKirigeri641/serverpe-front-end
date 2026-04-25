@@ -27,7 +27,7 @@ const footerLinks = [
   {
     title: 'Company',
     links: [
-      { label: 'About Us',       href: '/#why-us' },
+      { label: 'About Me',       href: '/#why-me' },
       { label: 'Pricing',        route: '/pricing' },
       { label: 'Contact',        href: '/#contact' },
       { label: 'Privacy Policy', route: '/privacy-policy', newTab: true },
@@ -114,7 +114,7 @@ const Footer = () => {
               <p className="text-[14px] font-medium leading-relaxed opacity-60" style={{ color: 'var(--ink-700)' }}>
                 Smart clicks, Smart taps.
                 <br />
-                Premium web solutions by
+                Premium web solution by
                 <br />
                 ServerPe App Solutions.
               </p>

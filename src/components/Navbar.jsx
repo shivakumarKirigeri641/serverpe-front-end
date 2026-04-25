@@ -7,7 +7,7 @@ import logo from '../images/serverpelogo_small1.jpg';
 const navLinks = [
   { label: 'Home', href: '/#', isHash: true },
   { label: 'Services', href: '/#services', isHash: true },
-  { label: 'Why Us', href: '/#why-us', isHash: true },
+  { label: 'Why Me', href: '/#why-me', isHash: true },
   { label: 'Pricing', href: '/pricing', isHash: false },
   { label: 'Vehicle Alerts', href: 'https://vehicle-alerts.in', isHash: false, external: true },
   { label: 'Contact', href: '/#contact', isHash: true },

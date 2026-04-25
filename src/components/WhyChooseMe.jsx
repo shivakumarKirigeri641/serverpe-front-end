@@ -44,7 +44,7 @@ const reasons = [
 
 const WhyChooseMe = () => {
   return (
-    <section id="why-us" className="relative py-24 lg:py-32" style={{ background: 'var(--bg-base)' }}>
+    <section id="why-me" className="relative py-24 lg:py-32" style={{ background: 'var(--bg-base)' }}>
       {/* Background Decor */}
       <div className="absolute inset-0 dot-pattern opacity-[0.04] pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] pointer-events-none"
