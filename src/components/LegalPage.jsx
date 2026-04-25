@@ -1,177 +1,164 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { HiArrowLeft, HiExclamationCircle, HiRefresh } from 'react-icons/hi';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { HiExclamationCircle, HiRefresh, HiShieldCheck } from 'react-icons/hi';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import logo from '../images/serverpe_logo.jpg';
 
-const Skeleton = () => (
-  <div className="space-y-4 animate-pulse">
-    <div className="h-5 rounded-lg w-2/3" style={{ background: 'rgba(255,255,255,0.06)' }} />
-    <div className="h-4 rounded-lg w-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-4 rounded-lg w-5/6" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-4 rounded-lg w-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-4 rounded-lg w-4/5" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-5 rounded-lg w-1/2 mt-8" style={{ background: 'rgba(255,255,255,0.06)' }} />
-    <div className="h-4 rounded-lg w-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-4 rounded-lg w-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-4 rounded-lg w-3/4" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-5 rounded-lg w-1/2 mt-8" style={{ background: 'rgba(255,255,255,0.06)' }} />
-    <div className="h-4 rounded-lg w-full" style={{ background: 'rgba(255,255,255,0.04)' }} />
-    <div className="h-4 rounded-lg w-5/6" style={{ background: 'rgba(255,255,255,0.04)' }} />
-  </div>
-);
-
-/**
- * LegalPage — reusable component for Privacy Policy & Terms and Conditions.
- *
- * @param {string}   title       - Page title shown in the hero header
- * @param {string}   subtitle    - Short descriptor shown below the title
- * @param {Function} fetchFn     - Async API function that returns the content
- * @param {string}   accentColor - Hex accent colour for the hero gradient
- */
-const LegalPage = ({ title, subtitle, fetchFn, accentColor = '#4F8EFF' }) => {
-  const [content, setContent] = useState(null);
-  const [lastUpdated, setLastUpdated] = useState(null);
+const LegalPage = ({ title, subtitle, fetchFn, accentColor = '#E8941A' }) => {
+  const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const load = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
       const data = await fetchFn();
       if (data.successstatus && data.data) {
-        // Handle array response from API
-        if (Array.isArray(data.data)) {
-          // Format array of objects into HTML content
-          const formattedContent = data.data
-            .map(item => `<section style="margin-bottom: 2rem;"><h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem;">${item.title}</h3><div style="line-height: 1.6; color: #e0e0e0;">${item.description}</div></section>`)
-            .join('');
-          setContent(formattedContent);
-        } else {
-          // Handle object response with content property
-          setContent(data.data.content ?? data.data);
-          setLastUpdated(data.data.last_updated ?? data.data.updated_at ?? null);
-        }
+        // Content might be in html_content or similar field depending on API
+        setContent(data.data.html_content || data.data.content || data.data);
       } else {
-        setError(data.message || 'Failed to load content. Please try again.');
+        setError(data.message || 'Failed to load content');
       }
-    } catch {
-      setError('Unable to load content. Please check your connection and try again.');
+    } catch (err) {
+      setError('Unable to load document. Please try again later.');
     } finally {
       setLoading(false);
     }
-  };
+  }, [fetchFn]);
 
   useEffect(() => {
-    load();
+    fetchData();
     window.scrollTo(0, 0);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchData]);
 
   return (
-    <div style={{ background: '#0B0F1A', minHeight: '100vh' }}>
+    <div className="min-h-screen flex flex-col noise-overlay" style={{ background: 'var(--bg-base)' }}>
       <Navbar />
 
-      {/* Hero header */}
-      <div
-        className="relative pt-32 pb-16 px-6 lg:px-8 overflow-hidden"
-        style={{ background: `linear-gradient(180deg, #080B14 0%, #0B0F1A 100%)` }}
-      >
-        {/* Radial glow behind header */}
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[320px] pointer-events-none"
-          style={{ background: `radial-gradient(ellipse at 50% 0%, ${accentColor}18 0%, transparent 70%)` }}
-        />
-
-        <div className="relative z-10 max-w-4xl mx-auto">
-          {/* Back link */}
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium mb-10 transition-colors duration-200 hover:text-white"
-            style={{ color: 'rgba(255,255,255,0.4)' }}
-          >
-            <HiArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
-
-          {/* Brand */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="bg-white rounded-lg overflow-hidden px-2.5 py-1.5">
-              <img src={logo} alt="ServerPe" className="h-7 w-auto object-contain" />
-            </div>
+      <main className="flex-1 pt-32 pb-24">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          {/* Header */}
+          <div className="mb-16 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-16 h-16 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm"
+              style={{ background: `${accentColor}15`, border: `1px solid ${accentColor}25` }}
+            >
+              <HiShieldCheck className="w-8 h-8" style={{ color: accentColor }} />
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-4xl lg:text-5xl font-bold mb-6 font-display"
+              style={{ color: 'var(--ink-900)' }}
+            >
+              {title}
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="text-lg font-medium max-w-2xl mx-auto"
+              style={{ color: 'var(--ink-500)' }}
+            >
+              {subtitle}
+            </motion.p>
           </div>
 
-          {/* Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+          {/* Content Area */}
+          <div
+            className="rounded-[40px] p-8 lg:p-16 bg-white border border-black/[0.05] shadow-xl min-h-[400px] relative overflow-hidden"
           >
-            <span
-              className="inline-block px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase mb-4"
-              style={{ background: `${accentColor}15`, color: accentColor, border: `1px solid ${accentColor}25` }}
-            >
-              Legal
-            </span>
-            <h1 className="font-heading font-bold text-white mb-3" style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)', letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-              {title}
-            </h1>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 16, lineHeight: 1.6 }}>
-              {subtitle}
-            </p>
-            {lastUpdated && (
-              <p className="mt-3 text-xs" style={{ color: 'rgba(255,255,255,0.25)' }}>
-                Last updated: {new Date(lastUpdated).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-            )}
-          </motion.div>
+            <AnimatePresence mode="wait">
+              {loading ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-white z-10"
+                >
+                  <div className="animate-spin w-10 h-10 border-4 border-amber-100 border-t-amber-500 rounded-full" />
+                  <p className="text-sm font-bold tracking-widest text-amber-900/30 uppercase">Loading Document</p>
+                </motion.div>
+              ) : error ? (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-col items-center text-center py-20 gap-6"
+                >
+                  <div className="w-16 h-16 rounded-3xl flex items-center justify-center bg-red-50 border border-red-100">
+                    <HiExclamationCircle className="w-8 h-8 text-red-500" />
+                  </div>
+                  <div className="max-w-xs">
+                    <p className="font-bold text-red-950 mb-2">{error}</p>
+                    <p className="text-sm text-red-900/40 font-medium">Please check your connection and try again.</p>
+                  </div>
+                  <button
+                    onClick={fetchData}
+                    className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-sm font-bold transition-all duration-300 btn-outline border-red-200 text-red-800 hover:bg-red-50"
+                  >
+                    <HiRefresh className="w-4 h-4" />
+                    Retry Load
+                  </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="content"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="prose prose-slate prose-amber max-w-none"
+                >
+                  <div className="legal-content-rendered">
+                    {Array.isArray(content) ? (
+                      <div className="space-y-10">
+                        {content.map((item, idx) => (
+                          <div key={item.id || idx}>
+                            {item.title && (
+                              <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--ink-900)', fontFamily: '"Sora", sans-serif' }}>
+                                {item.title}
+                              </h3>
+                            )}
+                            <div 
+                              className="font-medium leading-relaxed text-[15px]" 
+                              style={{ color: 'var(--ink-700)' }}
+                              dangerouslySetInnerHTML={{ __html: item.description || item.content || item }} 
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div 
+                        className="font-medium leading-relaxed text-[15px]" 
+                        style={{ color: 'var(--ink-700)' }}
+                        dangerouslySetInnerHTML={{ __html: content }} 
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Decorative stamp */}
+                  <div className="mt-20 pt-12 border-t border-black/5 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center border border-amber-100">
+                        <HiShieldCheck className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-amber-900/40">Verified Document</p>
+                        <p className="text-[10px] font-bold text-amber-900/20">© ServerPe App Solutions</p>
+                      </div>
+                    </div>
+                    <p className="text-[11px] font-bold opacity-30 italic">Effective Date: {new Date().toLocaleDateString('en-IN', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
-
-      {/* Divider line */}
-      <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
-
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-6 lg:px-8 py-16">
-        {loading && <Skeleton />}
-
-        {error && !loading && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center text-center py-16 gap-4"
-          >
-            <div
-              className="w-14 h-14 rounded-2xl flex items-center justify-center"
-              style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.2)' }}
-            >
-              <HiExclamationCircle className="w-6 h-6" style={{ color: '#f87171' }} />
-            </div>
-            <p className="text-white font-semibold">{error}</p>
-            <button
-              onClick={load}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200"
-              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.1)' }}
-            >
-              <HiRefresh className="w-4 h-4" />
-              Try Again
-            </button>
-          </motion.div>
-        )}
-
-        {content && !loading && (
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-            className="legal-content"
-            dangerouslySetInnerHTML={{ __html: content }}
-          />
-        )}
-      </div>
+      </main>
 
       <Footer />
     </div>

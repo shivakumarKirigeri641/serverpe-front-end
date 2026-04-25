@@ -1,150 +1,229 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiMenu, HiX } from 'react-icons/hi';
-import logoSmall from '../images/serverpelogo_small1.jpg';
+import { HiMenuAlt3, HiX, HiExternalLink } from 'react-icons/hi';
+import logo from '../images/serverpelogo_small1.jpg';
 
 const navLinks = [
-  { label: 'Services', href: '#services' },
-  { label: 'Products', href: '#vehicle-alerts' },
-  { label: 'Why Us', href: '#why-us' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Home', href: '/#', isHash: true },
+  { label: 'Services', href: '/#services', isHash: true },
+  { label: 'Why Us', href: '/#why-us', isHash: true },
+  { label: 'Pricing', href: '/pricing', isHash: false },
+  { label: 'Vehicle Alerts', href: 'https://vehicle-alerts.in', isHash: false, external: true },
+  { label: 'Contact', href: '/#contact', isHash: true },
 ];
 
 const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => { document.body.style.overflow = ''; };
-  }, [mobileOpen]);
+    setIsOpen(false);
+  }, [location]);
 
-  const handleNavClick = (e, href) => {
-    e.preventDefault();
-    setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const isPricingPage = location.pathname === '/pricing';
+
+  const scrollToHash = (href) => {
+    const id = href.replace('/#', '');
+    if (id === '') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled
-            ? 'bg-dark-900/90 backdrop-blur-xl border-b border-white/[0.06]'
-            : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-[72px]">
-            {/* Logo */}
-            <a href="/" className="flex items-center group">
-              <div className="bg-white rounded-xl overflow-hidden px-3 py-1.5 shadow-md group-hover:shadow-primary-500/20 transition-shadow duration-300">
-                <img src={logoSmall} alt="ServerPe" className="h-8 w-auto object-contain" />
-              </div>
-            </a>
-
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="relative px-4 py-2 text-[14px] font-medium text-white/50 hover:text-white transition-colors duration-200 rounded-lg hover:bg-white/[0.05]"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-
-            {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-3">
-              <a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
-                className="px-5 py-2.5 text-[13px] font-semibold text-dark-900 bg-white rounded-full hover:bg-slate-100 transition-all duration-200 shadow-lg shadow-white/10 hover:-translate-y-[1px]"
-              >
-                Get in Touch
-              </a>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden relative z-50 w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/[0.07] transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? (
-                <HiX className="w-5 h-5 text-white" />
-              ) : (
-                <HiMenu className="w-5 h-5 text-white" />
-              )}
-            </button>
+    <nav
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
+        scrolled ? 'glass-nav py-3' : 'bg-transparent py-6'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
+        {/* Logo */}
+        <Link 
+          to="/" 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center gap-3 group"
+        >
+          <div className="bg-white rounded-xl overflow-hidden px-1.5 py-0.5 shadow-sm border border-black/5 transition-transform group-hover:scale-105">
+            <img src={logo} alt="ServerPe" className="h-9 w-auto object-contain" />
           </div>
-        </div>
-      </motion.nav>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold leading-none tracking-tight" style={{ color: 'var(--ink-900)' }}>
+              ServerPe
+            </span>
+            <span className="text-[10px] font-semibold tracking-widest uppercase opacity-40" style={{ color: 'var(--ink-700)' }}>
+              App Solutions
+            </span>
+          </div>
+        </Link>
 
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-dark-900/98 backdrop-blur-2xl md:hidden"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              className="flex flex-col items-center justify-center h-full gap-6"
-            >
-              {navLinks.map((link, i) => (
-                <motion.a
-                  key={link.href}
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center gap-1.5">
+          {navLinks.map((link) => (
+            <React.Fragment key={link.label}>
+              {link.external ? (
+                <a
                   href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + i * 0.05 }}
-                  className="text-2xl font-heading font-semibold text-white/60 hover:text-white transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[14px] font-medium transition-all duration-200"
+                  style={{ color: 'var(--ink-500)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ink-900)'; e.currentTarget.style.background = 'rgba(26, 26, 46, 0.04)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ink-500)'; e.currentTarget.style.background = 'transparent'; }}
                 >
                   {link.label}
-                </motion.a>
+                  <HiExternalLink className="w-3.5 h-3.5 opacity-50" />
+                </a>
+              ) : link.isHash && location.pathname === '/' ? (
+                <button
+                  onClick={() => scrollToHash(link.href)}
+                  className="px-4 py-2 rounded-full text-[14px] font-medium transition-all duration-200"
+                  style={{ color: 'var(--ink-500)' }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ink-900)'; e.currentTarget.style.background = 'rgba(26, 26, 46, 0.04)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ink-500)'; e.currentTarget.style.background = 'transparent'; }}
+                >
+                  {link.label}
+                </button>
+              ) : (
+                <Link
+                  to={link.href.startsWith('/#') ? `/${link.href.replace('/#', '#')}` : link.href}
+                  className={`px-4 py-2 rounded-full text-[14px] font-medium transition-all duration-200 ${
+                    location.pathname === link.href ? 'active-link' : ''
+                  }`}
+                  style={{ 
+                    color: location.pathname === link.href ? 'var(--accent-amber)' : 'var(--ink-500)',
+                    background: location.pathname === link.href ? 'rgba(232, 148, 26, 0.06)' : 'transparent'
+                  }}
+                  onMouseEnter={(e) => { 
+                    if (location.pathname !== link.href) {
+                      e.currentTarget.style.color = 'var(--ink-900)'; 
+                      e.currentTarget.style.background = 'rgba(26, 26, 46, 0.04)'; 
+                    }
+                  }}
+                  onMouseLeave={(e) => { 
+                    if (location.pathname !== link.href) {
+                      e.currentTarget.style.color = 'var(--ink-500)'; 
+                      e.currentTarget.style.background = 'transparent'; 
+                    }
+                  }}
+                >
+                  {link.label}
+                </Link>
+              )}
+            </React.Fragment>
+          ))}
+          
+          <div className="w-px h-4 mx-2 bg-black/10" />
+          
+          <a
+            href="/#contact"
+            onClick={(e) => {
+              if (location.pathname === '/') {
+                e.preventDefault();
+                scrollToHash('/#contact');
+              }
+            }}
+            className="btn-amber px-6 py-2.5 rounded-full text-[14px] font-semibold"
+          >
+            Start Project
+          </a>
+        </div>
+
+        {/* Mobile Toggle */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="lg:hidden p-2 rounded-xl transition-colors"
+          style={{ background: 'rgba(26, 26, 46, 0.04)', color: 'var(--ink-900)' }}
+        >
+          {isOpen ? <HiX className="w-6 h-6" /> : <HiMenuAlt3 className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden glass-nav border-t overflow-hidden"
+            style={{ borderTopColor: 'var(--border-subtle)' }}
+          >
+            <div className="px-6 py-8 space-y-2">
+              {navLinks.map((link, idx) => (
+                <motion.div
+                  key={link.label}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between px-5 py-4 rounded-2xl text-[18px] font-semibold"
+                      style={{ color: 'var(--ink-900)', background: 'rgba(26, 26, 46, 0.03)' }}
+                    >
+                      {link.label}
+                      <HiExternalLink className="w-5 h-5 opacity-30" />
+                    </a>
+                  ) : link.isHash && location.pathname === '/' ? (
+                    <button
+                      onClick={() => scrollToHash(link.href)}
+                      className="w-full text-left px-5 py-4 rounded-2xl text-[18px] font-semibold"
+                      style={{ color: 'var(--ink-900)', background: 'rgba(26, 26, 46, 0.03)' }}
+                    >
+                      {link.label}
+                    </button>
+                  ) : (
+                    <Link
+                      to={link.href.startsWith('/#') ? `/${link.href.replace('/#', '#')}` : link.href}
+                      className="block px-5 py-4 rounded-2xl text-[18px] font-semibold"
+                      style={{ 
+                        color: location.pathname === link.href ? 'var(--accent-amber)' : 'var(--ink-900)',
+                        background: location.pathname === link.href ? 'rgba(232, 148, 26, 0.06)' : 'rgba(26, 26, 46, 0.03)'
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </motion.div>
               ))}
-              <motion.a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mt-4 px-8 py-3 text-base font-semibold text-dark-900 bg-white rounded-full"
+                transition={{ delay: navLinks.length * 0.05 }}
+                className="pt-4"
               >
-                Get in Touch
-              </motion.a>
-            </motion.div>
+                <a
+                  href="/#contact"
+                  onClick={(e) => {
+                    if (location.pathname === '/') {
+                      e.preventDefault();
+                      scrollToHash('/#contact');
+                    }
+                    setIsOpen(false);
+                  }}
+                  className="btn-amber block w-full py-5 rounded-2xl text-center font-bold text-lg"
+                >
+                  Start a Project
+                </a>
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </nav>
   );
 };
 

@@ -72,4 +72,11 @@ export const getTermsAndConditions = async () => {
   return response.data;
 };
 
+export const getProjectPricings = async () => {
+  const response = await apiClient.get(
+    "/serverpe/platform/public/project-pricings",
+  );
+  return response.data;
+};
+
 export default apiClient;

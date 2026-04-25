@@ -1,29 +1,132 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import logoSmall from '../images/serverpelogo_small1.jpg';
+import heroBg from '../images/hero_bg.png';
 
-/* ─── Dashboard Mockup ─────────────────────────────────────── */
+/* --- Star field (Lighter version) ----------------------------------------- */
+const StarField = () => {
+  const stars = useMemo(() => Array.from({ length: 70 }, (_, i) => ({
+    id: i,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    delay: Math.random() * 4,
+    duration: Math.random() * 3 + 2,
+  })), []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: star.size,
+            height: star.size,
+            background: 'var(--accent-amber)',
+            animation: `starPulse ${star.duration}s ease-in-out ${star.delay}s infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+/* --- Ambient Blobs (Bright version) --------------------------------------- */
+const AmbientBlobs = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div
+      className="absolute rounded-full"
+      style={{
+        width: 800, height: 800, top: '-10%', left: '40%',
+        transform: 'translateX(-50%)',
+        background: 'radial-gradient(circle, rgba(232,148,26,0.08) 0%, transparent 70%)',
+        filter: 'blur(60px)',
+        animation: 'blobMove1 25s ease-in-out infinite',
+      }}
+    />
+    <div
+      className="absolute rounded-full"
+      style={{
+        width: 600, height: 600, bottom: '0%', left: '-5%',
+        background: 'radial-gradient(circle, rgba(0,176,158,0.05) 0%, transparent 70%)',
+        filter: 'blur(70px)',
+        animation: 'blobMove2 30s ease-in-out infinite',
+      }}
+    />
+  </div>
+);
+
+/* --- Typewriter effect ---------------------------------------------------- */
+const words = ['smart', 'scalable', 'secure', 'modern'];
+const TypewriterWord = () => {
+  const [index, setIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const word = words[index];
+    const speed = isDeleting ? 50 : 100;
+
+    if (!isDeleting && displayed === word) {
+      const timeout = setTimeout(() => setIsDeleting(true), 2000);
+      return () => clearTimeout(timeout);
+    }
+
+    if (isDeleting && displayed === '') {
+      setIsDeleting(false);
+      setIndex((prev) => (prev + 1) % words.length);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      setDisplayed(prev =>
+        isDeleting ? prev.slice(0, -1) : word.slice(0, prev.length + 1)
+      );
+    }, speed);
+
+    return () => clearTimeout(timeout);
+  }, [displayed, isDeleting, index]);
+
+  return (
+    <em
+      className="gradient-text"
+      style={{ fontStyle: 'italic' }}
+    >
+      {displayed}
+      <span className="animate-pulse" style={{ color: 'var(--accent-amber)' }}>|</span>
+    </em>
+  );
+};
+
+/* --- Dashboard mockup (Bright version) ------------------------------------ */
 const DashboardMockup = () => (
   <motion.div
-    initial={{ opacity: 0, y: 60, scale: 0.96 }}
+    initial={{ opacity: 0, y: 60, scale: 0.98 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ duration: 1, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+    transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
     className="relative w-full max-w-5xl mx-auto"
   >
     {/* Ambient glow */}
     <div
       className="absolute -inset-x-20 -top-10 h-64 pointer-events-none"
-      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(46,111,255,0.22) 0%, rgba(6,182,212,0.08) 50%, transparent 70%)' }}
+      style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(232,148,26,0.1) 0%, transparent 70%)' }}
     />
 
     <div
       className="relative rounded-2xl overflow-hidden"
-      style={{ background: '#0F1321', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 50px 100px rgba(0,0,0,0.7)' }}
+      style={{ 
+        background: '#FFFFFF', 
+        border: '1px solid var(--border-medium)', 
+        boxShadow: '0 40px 100px rgba(26, 26, 46, 0.08), 0 0 0 1px rgba(232, 148, 26, 0.05)' 
+      }}
     >
       {/* Browser chrome */}
       <div
-        className="flex items-center gap-3 px-5 py-3.5 border-b border-white/[0.05]"
-        style={{ background: '#12141D' }}
+        className="flex items-center gap-3 px-5 py-3.5 border-b"
+        style={{ background: '#F8F9FB', borderColor: 'var(--border-subtle)' }}
       >
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded-full" style={{ background: '#FF5F57' }} />
@@ -33,230 +136,111 @@ const DashboardMockup = () => (
         <div className="flex-1 flex justify-center">
           <div
             className="h-6 rounded-lg px-6 flex items-center justify-center"
-            style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', minWidth: 200 }}
+            style={{ background: '#FFFFFF', border: '1px solid var(--border-subtle)', minWidth: 200 }}
           >
-            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>app.serverpe.in/dashboard</span>
+            <span style={{ fontSize: 10, color: 'var(--ink-300)' }}>app.serverpe.in/dashboard</span>
           </div>
         </div>
         <div className="w-16" />
       </div>
 
       {/* App body */}
-      <div className="flex" style={{ minHeight: 390 }}>
+      <div className="flex" style={{ minHeight: 400 }}>
         {/* Sidebar */}
         <div
-          className="hidden sm:flex w-52 flex-shrink-0 flex-col p-5 border-r border-white/[0.05]"
-          style={{ background: '#0B0D18' }}
+          className="hidden sm:flex w-52 flex-shrink-0 flex-col p-5 border-r"
+          style={{ background: '#FBFBFF', borderColor: 'var(--border-subtle)' }}
         >
           <div className="flex items-center gap-2 mb-7">
-            <div className="bg-white rounded-md overflow-hidden px-1.5 py-0.5">
-              <img src={logoSmall} alt="ServerPe" style={{ height: 20, width: 'auto', display: 'block' }} />
+            <div className="bg-white rounded-md overflow-hidden px-1.5 py-0.5 border border-black/5 shadow-sm">
+              <img src={logoSmall} alt="ServerPe" style={{ height: 18, width: 'auto', display: 'block' }} />
             </div>
           </div>
-
-          <p style={{ fontSize: 8, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.2)', marginBottom: 8, paddingLeft: 4 }}>
-            Navigation
-          </p>
-
+          <p style={{ fontSize: 8, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--ink-300)', marginBottom: 8, paddingLeft: 4 }}>Navigation</p>
           {[
             { label: 'Overview', active: true },
             { label: 'Projects', active: false },
             { label: 'Alerts', active: false, badge: '3' },
             { label: 'Database', active: false },
             { label: 'Bookings', active: false },
-            { label: 'Analytics', active: false },
           ].map((item) => (
-            <div
-              key={item.label}
-              className="flex items-center justify-between px-2 py-2 rounded-lg mb-0.5 cursor-default"
-              style={{
-                background: item.active ? 'rgba(46,111,255,0.12)' : 'transparent',
-                color: item.active ? '#4F8EFF' : 'rgba(255,255,255,0.35)',
-              }}
-            >
+            <div key={item.label} className="flex items-center justify-between px-2 py-2.5 rounded-lg mb-0.5 cursor-default"
+              style={{ background: item.active ? 'rgba(232,148,26,0.08)' : 'transparent', color: item.active ? 'var(--accent-amber)' : 'var(--ink-500)' }}>
               <div className="flex items-center gap-2">
                 <div className="w-1 h-1 rounded-full" style={{ background: 'currentColor', opacity: 0.7 }} />
-                <span style={{ fontSize: 11, fontWeight: 500 }}>{item.label}</span>
+                <span style={{ fontSize: 11, fontWeight: 600 }}>{item.label}</span>
               </div>
               {item.badge && (
-                <span
-                  style={{ fontSize: 8, background: 'rgba(46,111,255,0.2)', color: '#4F8EFF', borderRadius: 999, padding: '2px 6px' }}
-                >
-                  {item.badge}
-                </span>
+                <span style={{ fontSize: 8, background: 'var(--accent-amber)', color: '#FFF', borderRadius: 999, padding: '2px 6px' }}>{item.badge}</span>
               )}
             </div>
           ))}
-
-          <div className="mt-auto pt-4 border-t border-white/[0.05]">
-            <div className="flex items-center gap-2">
-              <div
-                className="w-6 h-6 rounded-full flex items-center justify-center text-white font-bold"
-                style={{ background: 'linear-gradient(135deg,#8b5cf6,#ec4899)', fontSize: 9 }}
-              >
-                A
-              </div>
-              <div>
-                <p style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.6)', lineHeight: 1 }}>Admin</p>
-                <p style={{ fontSize: 8, color: 'rgba(255,255,255,0.25)', marginTop: 2 }}>Pro Plan</p>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Main content */}
-        <div className="flex-1 p-5 lg:p-6 overflow-hidden">
-          {/* Header row */}
-          <div className="flex items-center justify-between mb-5">
+        <div className="flex-1 p-6 bg-white">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.9)', marginBottom: 3 }}>Overview</h3>
-              <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>April 2025 · All services</p>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink-900)', marginBottom: 2 }}>Dashboard</h3>
+              <p style={{ fontSize: 10, color: 'var(--ink-300)' }}>Real-time service monitoring</p>
             </div>
             <div className="flex items-center gap-2">
-              <div
-                className="px-3 py-1.5 rounded-lg cursor-default"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', fontSize: 10, color: 'rgba(255,255,255,0.4)' }}
-              >
-                Last 30 days ▾
-              </div>
-              <div
-                className="px-3 py-1.5 rounded-lg cursor-default font-medium"
-                style={{ background: 'rgba(46,111,255,0.15)', border: '1px solid rgba(46,111,255,0.3)', fontSize: 10, color: '#4F8EFF' }}
-              >
-                + New Project
-              </div>
+              <div className="px-3 py-1.5 rounded-lg border text-[10px] font-medium" style={{ borderColor: 'var(--border-subtle)', color: 'var(--ink-500)' }}>Last 7 Days ▾</div>
             </div>
           </div>
 
-          {/* KPI cards */}
-          <div className="grid grid-cols-3 gap-3 mb-5">
+          <div className="grid grid-cols-3 gap-4 mb-6">
             {[
-              { label: 'Active Users', value: '2,847', change: '↑ 12%', color: '#4F8EFF' },
-              { label: 'Live Projects', value: '18', change: '↑ 3 new', color: '#34D399' },
-              { label: 'Uptime', value: '99.7%', change: '● Stable', color: '#F59E0B' },
+              { label: 'Uptime', value: '99.9%', color: 'var(--accent-teal)' },
+              { label: 'Requests', value: '1.2M', color: 'var(--accent-amber)' },
+              { label: 'Errors', value: '0.01%', color: '#FB7185' },
             ].map((kpi) => (
-              <div
-                key={kpi.label}
-                className="p-3 rounded-xl"
-                style={{ background: '#131827', border: '1px solid rgba(255,255,255,0.06)' }}
-              >
-                <p style={{ fontSize: 9, color: 'rgba(255,255,255,0.35)', marginBottom: 6 }}>{kpi.label}</p>
-                <p style={{ fontWeight: 700, fontSize: 16, color: '#fff', lineHeight: 1, marginBottom: 6 }}>{kpi.value}</p>
-                <p style={{ fontSize: 9, fontWeight: 500, color: kpi.color }}>{kpi.change}</p>
+              <div key={kpi.label} className="p-4 rounded-xl border border-black/[0.03]" style={{ background: '#FBFBFF' }}>
+                <p style={{ fontSize: 9, color: 'var(--ink-300)', marginBottom: 4, fontWeight: 600 }}>{kpi.label}</p>
+                <p style={{ fontWeight: 800, fontSize: 18, color: 'var(--ink-900)', lineHeight: 1 }}>{kpi.value}</p>
               </div>
             ))}
           </div>
 
-          {/* Chart */}
-          <div
-            className="rounded-xl p-4 mb-4"
-            style={{ background: '#131827', border: '1px solid rgba(255,255,255,0.06)' }}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <p style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.45)' }}>Request Volume</p>
-              <div className="flex items-center gap-3">
-                {[
-                  { color: '#2e6fff', label: 'API Calls' },
-                  { color: '#22d3ee', label: 'DB Queries', dashed: true },
-                ].map((l) => (
-                  <span key={l.label} className="flex items-center gap-1">
-                    <span
-                      className="inline-block w-2 h-2 rounded-full"
-                      style={{ background: l.color }}
-                    />
-                    <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)' }}>{l.label}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-            <svg viewBox="0 0 340 65" style={{ width: '100%', height: 52 }}>
-              <defs>
-                <linearGradient id="hg1" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#2e6fff" stopOpacity="0.3" />
-                  <stop offset="100%" stopColor="#2e6fff" stopOpacity="0" />
-                </linearGradient>
-                <linearGradient id="hg2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.18" />
-                  <stop offset="100%" stopColor="#22d3ee" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M0,52 C30,47 50,43 70,36 C90,29 105,34 125,26 C145,18 158,20 175,14 C192,8 205,11 222,8 C239,5 255,9 272,6 C289,3 305,6 320,4 C330,3 336,5 340,4"
-                fill="none" stroke="#2e6fff" strokeWidth="1.5" strokeLinecap="round"
-              />
-              <path
-                d="M0,52 C30,47 50,43 70,36 C90,29 105,34 125,26 C145,18 158,20 175,14 C192,8 205,11 222,8 C239,5 255,9 272,6 C289,3 305,6 320,4 C330,3 336,5 340,4 L340,65 L0,65 Z"
-                fill="url(#hg1)"
-              />
-              <path
-                d="M0,60 C25,56 45,52 65,48 C85,44 100,47 120,42 C140,37 152,38 168,33 C184,28 197,30 214,26 C231,22 247,24 264,20 C281,17 296,18 312,15 C325,13 334,14 340,13"
-                fill="none" stroke="#22d3ee" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="5 3"
-              />
-              <path
-                d="M0,60 C25,56 45,52 65,48 C85,44 100,47 120,42 C140,37 152,38 168,33 C184,28 197,30 214,26 C231,22 247,24 264,20 C281,17 296,18 312,15 C325,13 334,14 340,13 L340,65 L0,65 Z"
-                fill="url(#hg2)"
-              />
-            </svg>
-          </div>
-
-          {/* Activity list */}
-          <div>
-            <p style={{ fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.2)', marginBottom: 8 }}>
-              Recent Activity
-            </p>
-            {[
-              { name: 'User Auth Service', time: '2m ago', status: '● Running', color: '#34D399' },
-              { name: 'OTP Dispatch Queue', time: '15m ago', status: '● Running', color: '#34D399' },
-              { name: 'Booking Reminder', time: '1h ago', status: '◐ Scheduled', color: '#F59E0B' },
-            ].map((item) => (
-              <div key={item.name} className="flex items-center justify-between py-1.5 px-2 rounded-lg">
-                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)' }}>{item.name}</span>
-                <div className="flex items-center gap-3">
-                  <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.2)' }}>{item.time}</span>
-                  <span style={{ fontSize: 9, fontWeight: 500, color: item.color }}>{item.status}</span>
-                </div>
-              </div>
+          <div className="rounded-xl border border-black/[0.03] p-4 h-32 flex items-end gap-1" style={{ background: '#FBFBFF' }}>
+            {[40, 70, 45, 90, 65, 80, 50, 85, 60, 95, 75, 40].map((h, i) => (
+              <div key={i} className="flex-1 rounded-t-sm" style={{ height: `${h}%`, background: i % 2 === 0 ? 'var(--accent-amber)' : 'var(--accent-teal)', opacity: 0.8 }} />
             ))}
           </div>
         </div>
       </div>
     </div>
-
-    {/* Bottom fade */}
-    <div
-      className="absolute inset-x-0 bottom-0 h-44 pointer-events-none"
-      style={{ background: 'linear-gradient(to top, #0B0F1A 0%, transparent 100%)' }}
-    />
   </motion.div>
 );
 
-/* ─── Hero Section ─────────────────────────────────────────── */
+/* --- Hero Section --------------------------------------------------------- */
 const Hero = () => {
-  const scrollTo = (href) => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  const scrollTo = (href) => {
+    const id = href.replace('#', '');
+    const el = document.getElementById(id);
+    if (id === '') window.scrollTo({ top: 0, behavior: 'smooth' });
+    else if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <section
-      className="relative overflow-hidden pt-[72px]"
-      style={{ background: '#0B0F1A', minHeight: '100vh' }}
+      className="relative overflow-hidden pt-[80px]"
+      style={{ background: 'var(--bg-base)', minHeight: '100vh' }}
     >
-      {/* Ambient radial glows */}
-      <div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[600px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(46,111,255,0.13) 0%, transparent 70%)' }}
-      />
-      <div
-        className="absolute top-1/2 left-0 w-[500px] h-[400px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, rgba(6,182,212,0.06) 0%, transparent 70%)' }}
-      />
-      <div
-        className="absolute top-1/2 right-0 w-[500px] h-[400px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.05) 0%, transparent 70%)' }}
-      />
+      {/* Background image with overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.15 }}>
+        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+      </div>
+      <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent 0%, var(--bg-base) 90%)' }} />
+
+      <AmbientBlobs />
+      <StarField />
 
       {/* Dot grid */}
-      <div className="absolute inset-0 dot-pattern opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 dot-pattern opacity-[0.05] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+
         {/* Eyebrow badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -264,56 +248,50 @@ const Hero = () => {
           transition={{ duration: 0.6 }}
           className="flex justify-center pt-20 mb-8"
         >
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
-            style={{ background: 'rgba(46,111,255,0.1)', border: '1px solid rgba(46,111,255,0.25)' }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse" />
-            <span className="text-xs font-semibold text-primary-300 tracking-wide">
-              Available for new projects · 2025
-            </span>
+          <div className="badge-amber px-5 py-2 rounded-full inline-flex items-center gap-2.5">
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--accent-amber)' }} />
+            <span>Available for new projects · 2025</span>
           </div>
         </motion.div>
 
-        {/* Headline */}
+        {/* Display headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          className="text-display text-center text-white max-w-4xl mx-auto"
-          style={{ lineHeight: '1.05' }}
+          transition={{ duration: 0.85, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+          className="text-center max-w-5xl mx-auto text-display"
+          style={{ color: 'var(--ink-900)' }}
         >
-          Software solutions{' '}
-          <span className="gradient-text">reimagined</span>{' '}
-          for smart businesses
+          Software built for{' '}
+          <TypewriterWord />{' '}
+          businesses.
         </motion.h1>
 
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-6 text-subheadline text-center max-w-2xl mx-auto leading-relaxed"
-          style={{ color: 'rgba(255,255,255,0.42)' }}
+          transition={{ duration: 0.7, delay: 0.22 }}
+          className="mt-8 text-center max-w-xl mx-auto text-[17px] leading-relaxed"
+          style={{ color: 'var(--ink-500)', letterSpacing: '-0.01em' }}
         >
           From full-stack development to intelligent booking systems — affordable,
-          production-grade web applications built by a dedicated sole proprietor.
+          production-grade web apps crafted by a dedicated sole proprietor.
         </motion.p>
 
         {/* CTA buttons */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          transition={{ duration: 0.7, delay: 0.32 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10"
         >
           <a
             href="#contact"
             onClick={(e) => { e.preventDefault(); scrollTo('#contact'); }}
-            className="group flex items-center gap-2 px-7 py-3.5 rounded-full text-[14px] font-semibold transition-all duration-300 hover:-translate-y-[2px]"
-            style={{ background: '#fff', color: '#0B0F1A', boxShadow: '0 8px 24px rgba(255,255,255,0.12)' }}
+            className="btn-amber group flex items-center gap-2 px-8 py-4 rounded-full text-[15px] font-bold"
           >
-            Get in Touch
+            Start a Project
             <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
@@ -321,34 +299,37 @@ const Hero = () => {
           <a
             href="#services"
             onClick={(e) => { e.preventDefault(); scrollTo('#services'); }}
-            className="px-7 py-3.5 rounded-full text-[14px] font-semibold transition-all duration-200 hover:-translate-y-[1px]"
-            style={{ color: 'rgba(255,255,255,0.55)', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}
+            className="btn-outline px-8 py-4 rounded-full text-[15px] font-semibold"
           >
             Explore Services
           </a>
         </motion.div>
 
-        {/* Trust badges */}
+        {/* Trust markers */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.5 }}
-          className="flex flex-wrap items-center justify-center gap-6 mt-10 pb-16"
+          className="flex flex-wrap items-center justify-center gap-8 mt-12 pb-16"
         >
-          {['Production Ready', 'PostgreSQL Expert', 'Affordable Pricing', 'Direct Contact'].map((badge) => (
-            <div key={badge} className="flex items-center gap-1.5">
-              <svg className="w-3.5 h-3.5 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+          {[
+            { label: 'Production Ready', color: 'var(--accent-amber)' },
+            { label: 'PostgreSQL Expert', color: 'var(--accent-teal)' },
+            { label: 'GST Inclusive', color: '#FB7185' },
+            { label: 'Direct Contact', color: 'var(--accent-amber-light)' },
+          ].map((badge) => (
+            <div key={badge.label} className="flex items-center gap-1.5">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke={badge.color}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
               </svg>
-              <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>{badge}</span>
+              <span style={{ fontSize: 12, color: 'var(--ink-500)', fontWeight: 600 }}>{badge.label}</span>
             </div>
           ))}
         </motion.div>
 
         {/* Dashboard mockup */}
         <DashboardMockup />
-
-        <div className="h-8" />
+        <div className="h-12" />
       </div>
     </section>
   );

@@ -7,7 +7,7 @@ const PrivacyPolicy = () => (
     title="Privacy Policy"
     subtitle="How ServerPe App Solutions collects, uses, and protects your personal information."
     fetchFn={getPrivacyPolicy}
-    accentColor="#4F8EFF"
+    accentColor="#E8941A"
   />
 );
 

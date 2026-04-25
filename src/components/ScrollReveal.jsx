@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 
-const ScrollReveal = ({ children, className = '', delay = 0, direction = 'up', once = true }) => {
+const ScrollReveal = ({ children, className = '', delay = 0, direction = 'up', once = true, spring = false }) => {
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once, margin: '-80px' });
+  const isInView = useInView(ref, { once, margin: '-60px' });
 
   const directionMap = {
     up: { y: 40, x: 0 },
@@ -21,11 +21,11 @@ const ScrollReveal = ({ children, className = '', delay = 0, direction = 'up', o
       className={className}
       initial={{ opacity: 0, ...offset }}
       animate={isInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, ...offset }}
-      transition={{
-        duration: 0.7,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+      transition={
+        spring
+          ? { type: 'spring', stiffness: 80, damping: 18, delay }
+          : { duration: 0.7, delay, ease: [0.25, 0.1, 0.25, 1] }
+      }
     >
       {children}
     </motion.div>
