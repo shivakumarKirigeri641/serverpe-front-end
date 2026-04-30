@@ -7,7 +7,7 @@ import PricingPage from "./pages/PricingPage";
 
 function App() {
   return (
-    <div className="noise-overlay">
+    <div>
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />

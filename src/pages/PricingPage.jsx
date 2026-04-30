@@ -10,7 +10,7 @@ const PricingPage = () => {
   }, []);
 
   return (
-    <div className="noise-overlay" style={{ background: 'var(--bg-base)', minHeight: '100vh' }}>
+    <div style={{ background: '#ffffff', minHeight: '100vh' }}>
       <Navbar />
       <div className="pt-[72px]">
         <Pricing />

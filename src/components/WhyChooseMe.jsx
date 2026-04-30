@@ -1,160 +1,111 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { HiUser, HiCurrencyRupee, HiPhone, HiLightningBolt } from 'react-icons/hi';
-import ScrollReveal from './ScrollReveal';
-import logo from '../images/serverpe_logo.jpg';
-
-const stats = [
-  { value: '1:1', label: 'Direct Access',    sub: 'You talk to the engineer, not a PM' },
-  { value: '₹',   label: 'Budget-Friendly',  sub: 'No agency overhead, honest pricing' },
-  { value: '0',   label: 'Middlemen',         sub: 'Sole proprietor from start to finish' },
-  { value: '100%', label: 'Ownership',        sub: 'Full lifecycle from build to deploy' },
-];
+import logo from '../images/serverpelogo_small.jpg';
 
 const reasons = [
-  {
-    icon: HiUser,
-    title: 'Sole Proprietor',
-    description: 'One dedicated software engineer handling your project end-to-end. No layers, no miscommunication — just direct, focused delivery.',
-    accent: '#E8941A',
-    iconBg: 'linear-gradient(135deg, #E8941A, #FFC150)',
-  },
-  {
-    icon: HiCurrencyRupee,
-    title: 'Affordable Pricing',
-    description: 'No bloated agency fees. Quality software at honest, affordable prices because I work solo with minimal overhead.',
-    accent: '#00C99A',
-    iconBg: 'linear-gradient(135deg, #00C99A, #06b6d4)',
-  },
-  {
-    icon: HiPhone,
-    title: 'Direct Contact',
-    description: "No customer care queues. Reach me directly. Expect some delay as I balance a full-time IT role, but you'll always get a response.",
-    accent: '#FFC150',
-    iconBg: 'linear-gradient(135deg, #FFC150, #FF8A50)',
-  },
-  {
-    icon: HiLightningBolt,
-    title: 'Individual Handled',
-    description: 'Every project receives my personal attention. From architecture to deployment — I own the full lifecycle of your application.',
-    accent: '#FF5E47',
-    iconBg: 'linear-gradient(135deg, #FF5E47, #E8941A)',
-  },
+  { num: '01', title: 'Sole Proprietor', description: 'One dedicated software engineer handling your project end-to-end. No layers, no miscommunication — just direct, focused delivery.' },
+  { num: '02', title: 'Affordable Pricing', description: 'No bloated agency fees. Quality software at honest, affordable prices because I work solo with minimal overhead.' },
+  { num: '03', title: 'Direct Contact', description: "No customer care queues. Reach me directly. Expect some delay as I balance a full-time IT role, but you'll always get a response." },
+  { num: '04', title: 'Individual Handled', description: 'Every project receives my personal attention. From architecture to deployment — I own the full lifecycle of your application.' },
 ];
 
 const WhyChooseMe = () => {
   return (
-    <section id="why-me" className="relative py-24 lg:py-32" style={{ background: 'var(--bg-base)' }}>
-      {/* Background Decor */}
-      <div className="absolute inset-0 dot-pattern opacity-[0.04] pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(232,148,26,0.05) 0%, transparent 70%)' }} />
+    <section id="why-me" className="relative overflow-hidden" style={{ background: '#ffffff' }}>
+      <div className="absolute inset-0 line-grid pointer-events-none" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
-
-        {/* Header */}
-        <ScrollReveal>
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-block px-4 py-1.5 rounded-full badge-amber mb-5">Why Choose Me</span>
-            <h2 className="text-headline mb-5">
-              Enterprise quality.{' '}
-              <span className="gradient-text">Indie speed.</span>
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
+        {/* Header — asymmetric */}
+        <div className="grid lg:grid-cols-2 gap-8 items-end mb-20">
+          <div>
+            <span className="marker marker-light mb-4 inline-block">Why Choose Me</span>
+            <h2 className="text-headline">
+              Enterprise quality.
+              <br />
+              <span style={{ color: '#2563eb' }}>Indie speed.</span>
             </h2>
-            <p className="text-lg leading-relaxed" style={{ color: 'var(--ink-500)' }}>
+          </div>
+          <div className="lg:text-right">
+            <p className="text-[15px] font-medium leading-[1.7]" style={{ color: '#71717a' }}>
               I'm a software engineer and sole proprietor from{' '}
-              <strong style={{ color: 'var(--ink-900)', fontWeight: 700 }}>ServerPe App Solutions</strong>
+              <strong style={{ color: '#0a0a0a' }}>ServerPe App Solutions</strong>
               {' '}— ready to deliver production-grade solutions at affordable prices.
             </p>
           </div>
-        </ScrollReveal>
+        </div>
 
-        {/* Stats row */}
-        <ScrollReveal delay={0.05}>
-          <div
-            className="grid grid-cols-2 lg:grid-cols-4 gap-px mb-16 rounded-3xl overflow-hidden shadow-md border"
-            style={{ background: 'var(--border-subtle)', borderColor: 'var(--border-subtle)' }}
-          >
-            {stats.map((stat) => (
-              <motion.div
-                key={stat.label}
-                className="flex flex-col items-center text-center p-10 cursor-default"
-                style={{ background: '#FFF' }}
-                whileHover={{ background: 'var(--bg-elevated)' }}
-                transition={{ duration: 0.2 }}
-              >
-                <p
-                  className="font-display font-bold mb-3 gradient-text"
-                  style={{ fontSize: 'clamp(2.2rem, 5vw, 3.2rem)', lineHeight: 1 }}
-                >
+        {/* Giant stats band */}
+        <div className="mb-20" style={{ borderTop: '4px solid #0a0a0a', borderBottom: '1px solid #e5e7eb' }}>
+          <div className="grid grid-cols-2 lg:grid-cols-4">
+            {[
+              { value: '1:1', label: 'Direct Access', sub: 'You talk to the engineer, not a PM' },
+              { value: '₹', label: 'Budget-Friendly', sub: 'No agency overhead, honest pricing' },
+              { value: '0', label: 'Middlemen', sub: 'Sole proprietor from start to finish' },
+              { value: '100%', label: 'Ownership', sub: 'Full lifecycle from build to deploy' },
+            ].map((stat, i) => (
+              <motion.div key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="py-10 px-6 lg:px-10 cursor-default group"
+                style={{ borderRight: i < 3 ? '1px solid #e5e7eb' : 'none' }}>
+                <p className="font-black mb-2 group-hover:text-blue-600 transition-colors"
+                  style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', lineHeight: 0.9, color: '#0a0a0a', letterSpacing: '-0.05em' }}>
                   {stat.value}
                 </p>
-                <p className="font-bold text-[14px] mb-2 tracking-tight" style={{ color: 'var(--ink-900)' }}>{stat.label}</p>
-                <p className="font-medium" style={{ fontSize: 12, color: 'var(--ink-300)' }}>{stat.sub}</p>
+                <p className="text-[13px] font-bold mb-1" style={{ color: '#0a0a0a' }}>{stat.label}</p>
+                <p className="text-[12px] font-medium" style={{ color: '#a1a1aa' }}>{stat.sub}</p>
               </motion.div>
             ))}
           </div>
-        </ScrollReveal>
-
-        {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {reasons.map((reason, idx) => {
-            const Icon = reason.icon;
-            return (
-              <ScrollReveal key={reason.title} delay={idx * 0.08} spring>
-                <motion.div
-                  whileHover={{ y: -10, borderColor: `${reason.accent}40` }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                  className="group relative h-full p-8 rounded-3xl overflow-hidden cursor-default glass-card"
-                  style={{ background: '#FFF' }}
-                >
-                  {/* Corner glow on hover */}
-                  <div
-                    className="absolute top-0 right-0 w-48 h-48 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: `radial-gradient(circle, ${reason.accent}08 0%, transparent 70%)`, transform: 'translate(30%, -30%)' }}
-                  />
-
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-sm"
-                    style={{ background: reason.iconBg }}
-                  >
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-
-                  <h3 className="font-bold text-lg mb-4 tracking-tight" style={{ color: 'var(--ink-900)', fontFamily: '"Sora", sans-serif' }}>
-                    {reason.title}
-                  </h3>
-                  <p className="font-medium" style={{ fontSize: 14, color: 'var(--ink-500)', lineHeight: 1.7 }}>
-                    {reason.description}
-                  </p>
-
-                  {/* Bottom accent line */}
-                  <div
-                    className="absolute bottom-0 left-0 h-[3px] w-0 group-hover:w-full transition-all duration-500 rounded-b-3xl"
-                    style={{ background: `linear-gradient(90deg, ${reason.accent}, transparent)` }}
-                  />
-                </motion.div>
-              </ScrollReveal>
-            );
-          })}
         </div>
 
-        {/* Trademark badge */}
-        <ScrollReveal delay={0.4}>
-          <div className="mt-16 text-center">
-            <div
-              className="inline-flex items-center gap-5 px-7 py-4 rounded-full shadow-sm border"
-              style={{ background: '#FFF', borderColor: 'var(--border-subtle)' }}
-            >
-              <div className="bg-white rounded-lg overflow-hidden px-2.5 py-1.5 border border-black/5 shadow-sm">
-                <img src={logo} alt="ServerPe" className="h-7 w-auto object-contain" />
+        {/* Reasons — editorial numbered list */}
+        <div className="grid lg:grid-cols-2 gap-0" style={{ borderTop: '1px solid #e5e7eb' }}>
+          {reasons.map((reason, idx) => (
+            <motion.div key={reason.num}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              className="py-10 px-0 lg:px-10 group cursor-default"
+              style={{
+                borderBottom: '1px solid #e5e7eb',
+                borderRight: idx % 2 === 0 ? '1px solid #e5e7eb' : 'none',
+                background: idx === 3 ? '#0a0a0a' : 'transparent',
+              }}>
+              <div className="flex gap-6">
+                <span className="font-mono text-[48px] font-black leading-none flex-shrink-0 group-hover:text-blue-600 transition-colors"
+                  style={{ color: idx === 3 ? '#27272a' : '#f3f4f6' }}>
+                  {reason.num}
+                </span>
+                <div>
+                  <h3 className="text-[20px] font-black mb-3"
+                    style={{ color: idx === 3 ? '#ffffff' : '#0a0a0a', letterSpacing: '-0.02em' }}>
+                    {reason.title}
+                  </h3>
+                  <p className="text-[14px] leading-[1.7] font-medium"
+                    style={{ color: idx === 3 ? '#71717a' : '#71717a' }}>
+                    {reason.description}
+                  </p>
+                </div>
               </div>
-              <p className="font-bold" style={{ fontSize: 13, color: 'var(--ink-300)' }}>Smart clicks, Smart taps — Trademark raised</p>
-            </div>
-          </div>
-        </ScrollReveal>
-      </div>
+            </motion.div>
+          ))}
+        </div>
 
-      <div className="section-divider mt-24 max-w-4xl mx-auto" />
+        {/* Brand stamp */}
+        <div className="mt-16 flex items-center gap-6">
+          <div className="w-12 h-12 flex-shrink-0">
+            <img src={logo} alt="ServerPe" className="h-full w-full object-contain" style={{ mixBlendMode: 'multiply' }} />
+          </div>
+          <div>
+            <p className="text-[13px] font-bold" style={{ color: '#0a0a0a' }}>Smart clicks, Smart taps</p>
+            <p className="text-[11px] font-medium" style={{ color: '#a1a1aa' }}>Trademark raised — ServerPe App Solutions</p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

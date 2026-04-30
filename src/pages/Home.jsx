@@ -10,7 +10,7 @@ import Footer from '../components/Footer';
 
 const Home = () => {
   return (
-    <div className="noise-overlay" style={{ background: 'var(--bg-base)' }}>
+    <div style={{ background: '#ffffff' }}>
       <Navbar />
       <main>
         <Hero />
